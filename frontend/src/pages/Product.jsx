@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
-import API from "../components/mockAPI";
-import { ListedItems } from "../components/ListedItems";
-import { FixedCart } from "../components/FixedCart";
-import { CartDetails } from "../components/CartDetails";
-import { Overlay } from "../components/Overlay";
+import API from "../components/ProductPage/mockAPI";
+import { ListedItems } from "../components/ProductPage/ListedItems";
+import { FixedCart } from "../components/ProductPage/FixedCart";
+import { CartDetails } from "../components/ProductPage/CartDetails";
+import { Overlay } from "../components/ProductPage/Overlay";
+import { GlobalStyles, lightGray } from "../components/ProductPage/GlobalStyles";
 
-import { GlobalStyles, lightGray } from "../components/GlobalStyles";
-
-function App() {
+function Products() {
   const [cart, setCart] = useState([]);
   const [items, setItems] = useState(API);
   const [cartOpen, isCartOpen] = useState(false);
@@ -138,5 +137,5 @@ const H1 = styled.h1`
   text-align: center;
   color: ${lightGray};
 `;
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+
+export default Products;
