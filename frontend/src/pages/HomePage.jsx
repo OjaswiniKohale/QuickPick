@@ -26,7 +26,7 @@ const HomePage = () => {
   return (
     <div>
 
-      <Newlaunch />
+      {/* <Newlaunch /> */}
       {/* <Mybasket /> */}
       {/* <Bank /> */}
       {/* <Bestsell /> */}
