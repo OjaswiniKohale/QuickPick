@@ -27,20 +27,20 @@ const HomePage = () => {
     <div>
 
       <Newlaunch />
-      <Mybasket />
-      <Bank />
-      <Bestsell />
-      <Topoffer />
+      {/* <Mybasket /> */}
+      {/* <Bank /> */}
+      {/* <Bestsell /> */}
+      {/* <Topoffer /> */}
       <Fruit />
-      <Beverage />
+      {/* <Beverage /> */}
       <Snack />
       <Cleaning />
-      <Beauty />
-      <Kitchen />
-      <Banner/>
-      <Brand />
-      <Featured />
-      <Bigonline />
+      {/* <Beauty /> */}
+      {/* <Kitchen /> */}
+      {/* <Banner/> */}
+      {/* <Brand /> */}
+      {/* <Featured /> */}
+      {/* <Bigonline /> */}
       <GoToTop/>
     </div>
     
