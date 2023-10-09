@@ -14,7 +14,6 @@ export const FixedCart = ({ cartItems, onOpen }) => (
     </CartBox>
   </FixedDiv>
 );
-
 const FixedDiv = styled.div`
   cursor: pointer;
   position: fixed;

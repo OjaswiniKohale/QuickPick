@@ -6,7 +6,7 @@ import Checkout from './pages/Checkout';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import './styles/globalStyles.css';
-// import Product from './pages/Product';
+import Product from './pages/Product';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
 				<Route path='/login' element={<Login />}></Route>
 				<Route path='/signup' element={<SignUp />}></Route>
 				<Route path='/checkout' element={<Checkout />}></Route>
-      			{/* <Route path='/product' element={<Product />}></Route> */}
+      			<Route path='/product' element={<Product />}></Route> 
 			</Routes>
 		</Router>
   )
