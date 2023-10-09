@@ -9,27 +9,27 @@ const StyledToolBar = styled(Toolbar)({
     justifyContent: "space-between"
 });
 
-const Search = styled("div")(({ theme })=>({border: " 2px solid #FF5722",
+const Search = styled("div")(({ theme })=>({border: " 2.5px solid #F57F17",
 padding:"0 10px",
 borderRadius: theme.shape.borderRadius,
 width: "40%",
 height: "2rem"
 }))
 
-const Icons = styled("Box")(({ theme })=>({borderBlockColor: " 2px solid #FF5722",}))
+const Icons = styled("Box")(({ theme })=>({}))
 
 const Navbar = () => {
     return(
         <AppBar position='sticky' sx={{backgroundColor: "white"}}>
             <StyledToolBar>
                 <img src={QuickPickLogo} style={{height:"4rem", marginLeft:"-1.5rem"}}/>
-                <Search sx={{color:"black", display:"flex", justifyContent:"flexstart", alignItems: "center" }}><InputBase placeholder='search...'/></Search>
+                <Search sx={{color:"black", display:"flex", justifyContent:"flexstart", alignItems: "center" }}><InputBase placeholder='search...' sx={{width: "100%"}}/></Search>
                 <Icons>
                     <Badge badgeContent={4} color="primary" sx={{ marginRight: "1.2rem", fontSize: "4rem"}}>
-                        <ShoppingCartIcon color="action" />
+                        <ShoppingCartIcon color="action" sx={{fontSize: "2rem", color: "#F57F17" }}/>
                     </Badge>
                     <Badge sx={{fontSize: "2rem"}}>
-                        <AccountCircleIcon color="action" />
+                        <AccountCircleIcon color="action" sx={{fontSize: "2rem", color: "#F57F17" }}/>
                     </Badge>
                 </Icons>
             </StyledToolBar>
