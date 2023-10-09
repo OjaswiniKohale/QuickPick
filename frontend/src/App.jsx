@@ -4,11 +4,14 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Checkout from './pages/Checkout';
 import HomePage from './pages/HomePage';
+import Navbar from './components/Navbar';
+import './styles/globalStyles.css';
 import Product from './pages/Product';
 
 function App() {
   return (
 		<Router>
+			<Navbar/>
 			<Routes>
 				<Route path='/' element={<HomePage />}></Route>
 				<Route path='/login' element={<Login />}></Route>
