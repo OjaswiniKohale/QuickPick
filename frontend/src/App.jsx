@@ -17,7 +17,7 @@ function App() {
 				<Route path='/login' element={<Login />}></Route>
 				<Route path='/signup' element={<SignUp />}></Route>
 				<Route path='/checkout' element={<Checkout />}></Route>
-      { /* <Route path='/product' element={<Product />}></Route> */ }
+      			{/* <Route path='/product' element={<Product />}></Route> */}
 			</Routes>
 		</Router>
   )

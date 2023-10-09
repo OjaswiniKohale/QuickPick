@@ -34,6 +34,7 @@ const HomePage = () => {
       <Fruit />
       {/* <Beverage /> */}
       <Snack />
+      
       <Cleaning />
       {/* <Beauty /> */}
       {/* <Kitchen /> */}

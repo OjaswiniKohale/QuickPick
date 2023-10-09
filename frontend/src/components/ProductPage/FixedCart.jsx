@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { P } from "./P";
 import { lightGray } from "./GlobalStyles";
 
