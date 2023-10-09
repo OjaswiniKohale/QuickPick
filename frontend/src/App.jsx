@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
 import './styles/globalStyles.css';
 import Product from './pages/Product';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 				<Route path='/signup' element={<SignUp />}></Route>
 				<Route path='/checkout' element={<Checkout />}></Route>
       			<Route path='/product' element={<Product />}></Route> 
+      			<Route path='/profile' element={<Profile/>}></Route> 
 			</Routes>
 		</Router>
   )
