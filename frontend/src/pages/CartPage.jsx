@@ -1,4 +1,6 @@
-import React from "react";
+import React, {useContext} from "react";
+import {CartItem} from "../components/CartItem";
+import "../styles/cart.css"
 const PRODUCTS=[
     "https://tse4.mm.bing.net/th?id=OIP.IXKCpF-CG8jGSmOdUoYKIQHaEK&pid=Api&P=0&h=180", 
     "https://tse1.mm.bing.net/th?id=OIP.S0MwlWV6Tgy2br4GfBaJcgHaE6&pid=Api&P=0&h=180",
@@ -12,7 +14,6 @@ const PRODUCTS=[
 
   export const Cart = () => {
 
-    const { cartItems } = useContext(ShopContext);
 
     return (
         <div className="cart">
@@ -20,12 +21,13 @@ const PRODUCTS=[
                 <h1>Your Cart Items</h1>
             </div>
             <div className="cartItems">
-                {PRODUCTS.map((product) => {
-                    if(cartItems[product.id]!=0){
-                        return <CartItem data={product}/>; 
-                    }
-                })}
+                {PRODUCTS.map((product,index) => {
+                    
+                        return <CartItem data={product} key={index}/>; 
+                                    })}
             </div>
         </div>
     )
   }
+
+export default Cart;
