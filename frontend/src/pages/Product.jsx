@@ -212,6 +212,16 @@ const cleaners=[
   "https://www.bigbasket.com/media/uploads/p/l/40173107_5-bb-home-naphthalene-balls.jpg"
 ]
 
+const beverages=[
+  "https://5.imimg.com/data5/FW/XJ/VA/SELLER-30759087/real-mixed-fruit-juice.jpg",
+  "https://www.justgotochef.com/uploads/1538570082-Tropicana-Orange%20%20Juice-Front.jpg",
+  "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/products/sliding_image/20143a.jpg?ts=1687525090",
+  "https://img5.hkrtcdn.com/17188/prd_1718784-Alo-Frut-Mixed-Fruit-Aloevera-Juice-1-L-Mixed-Fruit_o.jpg",
+  "https://www.hi5mart.com/image/cache/catalog/DRINKS%20AND%20BEVERAGES/Coca%20Cola/Coca%20Cola%20Soft%20Drink,%20750%20ml%20Bottle-750x750.jpg",
+  "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/products/sliding_image/312a.jpg?ts=1678183838",
+  "https://images-eu.ssl-images-amazon.com/images/I/51C8U7H-+6L._AC_UL330_SR330,330_.jpg",
+  "https://www.bigbasket.com/media/uploads/p/l/20003889_3-godrej-jersey-flavoured-milk-pista.jpg"
+]
 
   return (
     <div className='container mt-5'>
