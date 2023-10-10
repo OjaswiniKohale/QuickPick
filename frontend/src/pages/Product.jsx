@@ -163,12 +163,56 @@ const Product = () => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC7KiwyXsuatUij3b0HeQ9SHmEshhkCeXSnQ&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOlYw2zxaNolhltDbhHmmJiFPckqc0rPzTrw&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4oLcSs5YVJ-OEE7Piq_6fiiMXyg4CLIkObQ&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsOC5aQWdC0S3_H8nWyGGcSWDXb-aOhO09Og&usqp=CAU"
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsOC5aQWdC0S3_H8nWyGGcSWDXb-aOhO09Og&usqp=CAU",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrJIMJGJA3ZQ2oveGs0z1hquI_Q87x4anyWQ&usqp=CAU"
   ]
 
+const snacks=[
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBtI_OFRR6BCr02XPAw25P-GpbzCSsbHOf_w&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKrPcx8FJ3qyKJ8kmSTVK3YaLCaXvkUmKE8g&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR82MKjFVD-3AbBiqjyEvcWtBso2DSSBurtVQ&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUih5ltcKB09rRsyCPA0TQg4aXoMyXfRWiuw&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkSL8bkSQzXQaYs3yqtdq5J3JuyItAq9k0jQ&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBtI_OFRR6BCr02XPAw25P-GpbzCSsbHOf_w&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMKK04OST8DPRGoF0JLEM6W1QeNRZTHU60bqwJ_da5cusdW53aatgpfAS_oJrPphKukqU&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvNmhh8-_fSaOPRMWjB9V0hIgb-np1n3eleQ&usqp=CAU"
+]
 
-
+const cookies=[
+  "https://www.bigbasket.com/media/uploads/p/l/286082_12-sunfeast-dark-fantasy-choco-fills-biscuits-cookies.jpg?tr=w-640,q=80",
+  "https://m.media-amazon.com/images/I/61Xj1A6WCTL._SL1500_.jpg",
+  "https://m.media-amazon.com/images/I/61EP5COKj4L.jpg",
+  "https://5.imimg.com/data5/UX/SO/HC/SELLER-16537610/priyagold-cheese-cracker-biscuits.jpg",
+  "https://www.jiomart.com/images/product/original/491587134/britannia-milk-bikis-biscuits-500-g-product-images-o491587134-p491587134-0-202203170354.jpg?im=Resize=(1000,1000)",
+  "https://www.bigbasket.com/media/uploads/p/l/40086304-2_6-britannia-nutrichoice-digestive-zero-high-fibre-biscuits.jpg",
+  "https://5.imimg.com/data5/SELLER/Default/2023/3/291829697/UT/JE/CF/51126755/britannia-bourbon-biscuit.jpg",
+  "https://www.jiomart.com/images/product/original/491539619/parle-g-original-glucose-biscuits-100-g-product-images-o491539619-p491539619-0-202301131722.jpg?im=Resize=(1000,1000)"
+]
   
+
+const sweets=[
+  "https://m.media-amazon.com/images/I/81JugTbWdzL.jpg",
+  "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/products/sliding_image/11022b.jpg?ts=1688807689",
+  "https://www.bigbasket.com/media/uploads/p/xl/40122230_9-nestle-kitkat-crispy-wafer-bar.jpg",
+  "https://5.imimg.com/data5/SELLER/Default/2022/4/BX/LT/MY/5116174/nastle-maha-munch-chocolate.jpg",
+  "https://www.haldirams.com/media/catalog/product/cache/71134970afb779eb7860339989626b7e/r/a/rasgulla_6.jpg",
+  "https://www.haldirams.com/media/catalog/product/cache/71134970afb779eb7860339989626b7e/g/j/gj-500g-front-1v1.jpg",
+  "https://baazwsh.com/cdn/shop/products/besan-ladoo-400g-haldirams-baazwsh-763272.jpg?v=1665488010",
+  "https://www.haldirams.com/media/catalog/product/cache/71134970afb779eb7860339989626b7e/m/i/milk_cake.jpg"
+]
+
+const cleaners=[
+  "https://5.imimg.com/data5/SELLER/Default/2021/7/IO/JV/SW/59620849/61lonlblx1l-sl1000--500x500.jpg",
+  "https://cdn01.pharmeasy.in/dam/products_otc/S29945/lizol-lavender-disinfectant-floor-cleaner-liquid-bottle-of-500-ml-2-1670493093.jpg",
+  "https://www.bigbasket.com/media/uploads/p/l/40192803_1-surf-excel-quick-wash-detergent-powder.jpg",
+  "https://familyneeds.co.in/cdn/shop/products/1_54789f6c-4710-4f16-b0db-a520ecd01310_600x600.jpg?v=1598646838",
+  "https://m.media-amazon.com/images/I/61o5c4JhzTL.jpg",
+  "https://www.netmeds.com/images/product-v1/600x600/410290/dettol_liquid_handwash_original_200_ml_52183_0_1.jpg",
+  "https://ml0co0iaphua.i.optimole.com/w:1000/h:1000/q:mauto/f:avif/https://gharstuff.com/wp-content/uploads/2018/11/Tide-Plus-Extra-Power-Jasmine-Rose-Detergent-Powder-500g-2.jpg",
+  "https://www.bigbasket.com/media/uploads/p/l/40173107_5-bb-home-naphthalene-balls.jpg"
+]
+
+
   return (
     <div className='container mt-5'>
       <h1 className='text-center mb-4'>Product Page</h1>
