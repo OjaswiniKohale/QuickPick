@@ -223,6 +223,13 @@ const beverages=[
   "https://www.bigbasket.com/media/uploads/p/l/20003889_3-godrej-jersey-flavoured-milk-pista.jpg"
 ]
 
+const fresheners=[
+  "https://www.princeofficesolutions.com/media/catalog/product/cache/5aaeaba771243db0eb99143619c69cf0/p/o/pos547_1.png",
+  "https://sindirasupermarket.com/wp-content/uploads/2020/11/aer1-300x300.jpg",
+  "https://www.laverretail.com/wp-content/uploads/2023/05/GN.jpg",
+  "https://5.imimg.com/data5/NE/JP/MY-23387521/odonil-toilet-air-freshener.jpg"
+]
+
   return (
     <div className='container mt-5'>
       <h1 className='text-center mb-4'>Product Page</h1>
