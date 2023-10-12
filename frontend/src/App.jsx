@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp';
 import Checkout from './pages/Checkout';
 import HomePage from './pages/HomePage';
 import Navbar from './components/Navbar';
+import './styles/globalStyles.css';
 import Product from './pages/Product';
 import Profile from './pages/Profile';
 import CartPage from './pages/CartPage';
