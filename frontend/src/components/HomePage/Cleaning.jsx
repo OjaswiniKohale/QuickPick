@@ -1,11 +1,7 @@
 import "./Landing.Module.css";
-<<<<<<< Updated upstream
 import freshnerlogo from '../../assets/freshners.png'
-
-
-=======
 import cleaners from '../../assets/cleaners.png'
->>>>>>> Stashed changes
+
 
 
 const Cleaning = () => {
