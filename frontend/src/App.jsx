@@ -9,6 +9,8 @@ import './styles/globalStyles.css';
 import Product from './pages/Product';
 import Profile from './pages/Profile';
 import CartPage from './pages/CartPage';
+import OtpPage from './pages/OtpPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
       			<Route path='/product' element={<Product />}></Route> 
       			<Route path='/profile' element={<Profile/>}></Route> 
       			<Route path='/cart' element={<CartPage/>}></Route> 
+      			<Route path='/otp' element={<OtpPage/>}></Route> 
+      			<Route path='/forgotPass' element={<ForgotPasswordPage/>}></Route> 
 			</Routes>
 		</Router>
   )
