@@ -11,10 +11,11 @@ import Profile from './pages/Profile';
 import CartPage from './pages/CartPage';
 import OtpPage from './pages/OtpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
-
+import { ShopContextProvider } from './context/shop-context';
 function App() {
   return (
-		<Router>
+		<ShopContextProvider>
+					<Router>
 			<Navbar/>
 			<Routes>
 				<Route path='/' element={<HomePage />}></Route>
@@ -28,6 +29,7 @@ function App() {
       			<Route path='/forgotPass' element={<ForgotPasswordPage/>}></Route> 
 			</Routes>
 		</Router>
+		</ShopContextProvider>
   )
 }
 

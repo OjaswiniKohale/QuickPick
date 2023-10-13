@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import '../styles/Stars.css'
+import { ShopContext } from '../context/shop-context';
 const Cart = (props) => {
-  const { name, price, img } = props;
+  const { name, price, img,id } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
+  const { addToCart, cartItems } = useContext(ShopContext);
+
+  const cartItemCount = cartItems[id];
 
   const total = (quantity * price).toFixed(2);
 
@@ -72,11 +76,9 @@ const Cart = (props) => {
         >
           Remove
         </button>
-        <button
-          className="btn btn-primary btn-sm"
-        >
-          Add to Cart
-        </button>
+        <button className="addToCartBttn" onClick={() => addToCart(id)}>
+        Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>}
+      </button>
       </div>
       <ul className="list-group">
         <li className='list-group-item'>
