@@ -1,15 +1,23 @@
-import React, { useState,useContext } from 'react';
-import '../styles/Stars.css'
-import { ShopContext } from '../context/shop-context';
+import React, { useState } from "react";
+import "../styles/Stars.css";
 const Cart = (props) => {
-  const { name, price, img,id } = props;
+  const { name, price, img, makeCart, currentCart } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
-  const { addToCart, cartItems } = useContext(ShopContext);
+  const total = price.toFixed(2);
 
-  const cartItemCount = cartItems[id];
-
-  const total = (quantity * price).toFixed(2);
+  const cartAddition = (name, price, img) => {
+    const updatedCart = [
+      ...currentCart,
+      {
+        name,
+        price,
+        img,
+        quantity,
+      },
+    ];
+    makeCart(updatedCart);
+  };
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
@@ -30,7 +38,10 @@ const Cart = (props) => {
   };
 
   return (
-    <div className="card border border-3 rounded" style={{ width: "18rem", height: "100%" }}>
+    <div
+      className="card border border-3 rounded"
+      style={{ width: "18rem", height: "100%" }}
+    >
       <img
         src={img}
         className="card-img-top"
@@ -70,18 +81,18 @@ const Cart = (props) => {
         </li>
       </ul>
       <div className="card-footer d-flex justify-content-between">
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={removeFromCart}
-        >
+        <button className="btn btn-danger btn-sm" onClick={removeFromCart}>
           Remove
         </button>
-        <button className="addToCartBttn" onClick={() => addToCart(id)}>
-        Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>}
-      </button>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => cartAddition(name, total, img)}
+        >
+          Add to Cart
+        </button>
       </div>
       <ul className="list-group">
-        <li className='list-group-item'>
+        <li className="list-group-item">
           <div className="mb-3">
             <fieldset className="starability-basic">
               <h6>Review:</h6>
@@ -109,7 +120,7 @@ const Cart = (props) => {
                     title={getRatingTitle(ratingValue)}
                     className="star-label"
                   >
-                    {ratingValue} star{ratingValue !== 1 ? 's' : ''}
+                    {ratingValue} star{ratingValue !== 1 ? "s" : ""}
                   </label>
                 </React.Fragment>
               ))}

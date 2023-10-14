@@ -5,23 +5,27 @@ const PRODUCTS = getProductsFunction();
 import { useNavigate } from "react-router-dom";
 import { CartItem1 } from "../components/CartItem1";
 import "../styles/cart.css";
-const CartPage = () => {
-  const { cartItems, getTotalCartAmount, checkout } = useContext(ShopContext);
-  const totalAmount = getTotalCartAmount();
+import CartItem from "../components/CartItem";
 
-  const navigate = useNavigate();
+const navigate = useNavigate();
 
+export const CartPage = ({ currentCart }) => {
   return (
     <div className="cart">
       <div>
         <h1>Your Cart Items</h1>
       </div>
-      <div className="cart">
-        {PRODUCTS.map((product) => {
-          if (cartItems[product.id] !== 0) {
-            return <CartItem1 data={product} />;
-          }
-        })}
+      <div className="row">
+        {currentCart.map((product, index) => (
+          <div className="col-md-3 mt-5" key={index}>
+            <CartItem
+              price={product.price}
+              name={product.name}
+              img={product.img}
+              quantity={product.quantity}
+            />
+          </div>
+        ))}
       </div>
 
       {totalAmount > 0 ? (
