@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/cart.css";
-import CartItem from '../components/CartItem';
+import CartItem from "../components/CartItem";
 
 const PRODUCTS = [
   "https://tse4.mm.bing.net/th?id=OIP.IXKCpF-CG8jGSmOdUoYKIQHaEK&pid=Api&P=0&h=180",
@@ -13,16 +13,21 @@ const PRODUCTS = [
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8Q4uIH9CEAuEL80813qdvOdWUGUzbpbYMxQ&usqp=CAU",
 ];
 
-export const Cart = () => {
+export const CartPage = ({ currentCart }) => {
   return (
     <div className="cart">
       <div>
         <h1>Your Cart Items</h1>
       </div>
       <div className="row">
-        {PRODUCTS.map((product, index) => (
+        {currentCart.map((product, index) => (
           <div className="col-md-3 mt-5" key={index}>
-            <CartItem price={30} name="Banana" img={product} />
+            <CartItem
+              price={product.price}
+              name={product.name}
+              img={product.img}
+              quantity={product.quantity}
+            />
           </div>
         ))}
       </div>
@@ -30,4 +35,4 @@ export const Cart = () => {
   );
 };
 
-export default Cart;
+export default CartPage;
