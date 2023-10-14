@@ -11,7 +11,6 @@ import Profile from "./pages/Profile";
 import CartPage from "./pages/CartPage";
 import OtpPage from "./pages/OtpPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-
 function App() {
   const [cart, setCart] = useState([]);
   return (

@@ -1,17 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
+import { ShopContext } from "../context/shop-context";
+import  getProductsFunction  from "../assets/products";
+const PRODUCTS = getProductsFunction();
+import { useNavigate } from "react-router-dom";
+import { CartItem1 } from "../components/CartItem1";
 import "../styles/cart.css";
 import CartItem from "../components/CartItem";
 
-const PRODUCTS = [
-  "https://tse4.mm.bing.net/th?id=OIP.IXKCpF-CG8jGSmOdUoYKIQHaEK&pid=Api&P=0&h=180",
-  "https://tse1.mm.bing.net/th?id=OIP.S0MwlWV6Tgy2br4GfBaJcgHaE6&pid=Api&P=0&h=180",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1aXqHdPUhiGbV6IpAjNQWfago64IWwCZqlA&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcPhPFg7QhdbFjttG9SNME-uHndIPW2Y40Zw&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKNw11AtnkYWJNc3efgIMjnzsXPAB19qAP_w&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2dQwLWdyqVnvijep83uzmRoX-FGXO_9SUcw&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfXdJPRyEebLRiUikB5x9hw-AwOYdNLUaKeA&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8Q4uIH9CEAuEL80813qdvOdWUGUzbpbYMxQ&usqp=CAU",
-];
+const navigate = useNavigate();
 
 export const CartPage = ({ currentCart }) => {
   return (
@@ -31,6 +27,24 @@ export const CartPage = ({ currentCart }) => {
           </div>
         ))}
       </div>
+
+      {totalAmount > 0 ? (
+        <div className="checkout">
+          <p> Subtotal: ${totalAmount} </p>
+          <button onClick={() => navigate("/")}> Continue Shopping </button>
+          <button
+            onClick={() => {
+              checkout();
+              navigate("/checkout");
+            }}
+          >
+            {" "}
+            Checkout{" "}
+          </button>
+        </div>
+      ) : (
+        <h1> Your Shopping Cart is Empty</h1>
+      )}
     </div>
   );
 };
