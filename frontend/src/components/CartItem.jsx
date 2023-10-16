@@ -2,8 +2,7 @@ import React from "react";
 import { useState } from "react";
 const CartItem = (props) => {
   const { name, price, img, quantity } = props;
-  //const [quantity, setQuantity] = useState(1);
-
+  // const [quantity, setQuantity] = useState(1);
   const total = (quantity * price).toFixed(2);
 
   const increaseQuantity = () => {

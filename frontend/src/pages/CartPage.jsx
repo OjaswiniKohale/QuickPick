@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-import { ShopContext } from "../context/shop-context";
+import React from "react";
 import  getProductsFunction  from "../assets/products";
 const PRODUCTS = getProductsFunction();
-import { useNavigate } from "react-router-dom";
-import { CartItem1 } from "../components/CartItem1";
+// import { useNavigate } from "react-router-dom";
 import "../styles/cart.css";
 import CartItem from "../components/CartItem";
 
-const navigate = useNavigate();
+// const navigate = useNavigate();
 
 export const CartPage = ({ currentCart }) => {
   return (
@@ -28,7 +26,7 @@ export const CartPage = ({ currentCart }) => {
         ))}
       </div>
 
-      {totalAmount > 0 ? (
+      {/* {totalAmount > 0 ? (
         <div className="checkout">
           <p> Subtotal: ${totalAmount} </p>
           <button onClick={() => navigate("/")}> Continue Shopping </button>
@@ -44,7 +42,7 @@ export const CartPage = ({ currentCart }) => {
         </div>
       ) : (
         <h1> Your Shopping Cart is Empty</h1>
-      )}
+      )} */}
     </div>
   );
 };
