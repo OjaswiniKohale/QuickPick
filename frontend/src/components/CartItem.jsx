@@ -4,15 +4,13 @@ const CartItem = (props) => {
   const { name, price, img, quantity, setQuantity, removeFromCart } = props;
   const total = (quantity * price).toFixed(2);
 
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-    console.log(quantity);
+  const increaseQuantity = (name) => {
+    setQuantity(name, quantity + 1);
   };
 
-  const decreaseQuantity = () => {
+  const decreaseQuantity = (name) => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
-      quantity--;
+      setQuantity(name, quantity - 1);
     }
   };
 
@@ -38,14 +36,14 @@ const CartItem = (props) => {
             <div className="input-group">
               <button
                 className="btn btn-outline-danger btn-sm"
-                onClick={decreaseQuantity}
+                onClick={() => decreaseQuantity(name)}
               >
                 -
               </button>
               <span className="input-group-text">{quantity}</span>
               <button
                 className="btn btn-outline-success btn-sm"
-                onClick={increaseQuantity}
+                onClick={() => increaseQuantity(name)}
               >
                 +
               </button>
@@ -60,7 +58,10 @@ const CartItem = (props) => {
         </li>
       </ul>
       <div className="card-footer d-flex justify-content-between">
-        <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(name)}>
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={() => removeFromCart(name)}
+        >
           Remove
         </button>
       </div>

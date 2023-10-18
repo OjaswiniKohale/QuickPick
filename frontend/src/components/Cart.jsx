@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Stars.css";
+
 const Cart = (props) => {
   const { name, price, img, makeCart, currentCart } = props;
   const [quantity, setQuantity] = useState(1);
@@ -7,7 +8,9 @@ const Cart = (props) => {
   const total = price.toFixed(2);
 
   const cartAddition = (name, price, img) => {
-    const existingProduct = currentCart.find(product => product.name === name);
+    const existingProduct = currentCart.find(
+      (product) => product.name === name,
+    );
     let updatedCart;
     if (!existingProduct) {
       updatedCart = [
@@ -20,9 +23,7 @@ const Cart = (props) => {
         },
       ];
     } else {
-      updatedCart = [
-        ...currentCart,
-      ];
+      updatedCart = [...currentCart];
 
       for (let item of updatedCart) {
         if (item.name === existingProduct.name) {
