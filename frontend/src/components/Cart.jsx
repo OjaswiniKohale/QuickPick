@@ -7,15 +7,29 @@ const Cart = (props) => {
   const total = price.toFixed(2);
 
   const cartAddition = (name, price, img) => {
-    const updatedCart = [
-      ...currentCart,
-      {
-        name,
-        price,
-        img,
-        quantity,
-      },
-    ];
+    const existingProduct = currentCart.find(product => product.name === name);
+    let updatedCart;
+    if (!existingProduct) {
+      updatedCart = [
+        ...currentCart,
+        {
+          name,
+          price,
+          img,
+          quantity,
+        },
+      ];
+    } else {
+      updatedCart = [
+        ...currentCart,
+      ];
+
+      for (let item of updatedCart) {
+        if (item.name === existingProduct.name) {
+          item.quantity += quantity;
+        }
+      }
+    }
     makeCart(updatedCart);
   };
 

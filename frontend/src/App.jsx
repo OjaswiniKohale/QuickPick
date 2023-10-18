@@ -26,7 +26,7 @@ function App() {
           element={<Product currentCart={cart} makeCart={setCart} />}
         ></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/cart" element={<CartPage currentCart={cart} />}></Route>
+        <Route path="/cart" element={<CartPage currentCart={cart} makeCart={setCart} />}></Route>
         <Route path="/otp" element={<OtpPage />}></Route>
         <Route path="/forgotPass" element={<ForgotPasswordPage />}></Route>
       </Routes>

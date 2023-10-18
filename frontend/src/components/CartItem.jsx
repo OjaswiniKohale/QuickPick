@@ -1,23 +1,21 @@
 import React from "react";
 import { useState } from "react";
 const CartItem = (props) => {
-  const { name, price, img, quantity } = props;
-  // const [quantity, setQuantity] = useState(1);
+  const { name, price, img, quantity, setQuantity, removeFromCart } = props;
   const total = (quantity * price).toFixed(2);
 
   const increaseQuantity = () => {
     setQuantity(quantity + 1);
+    console.log(quantity);
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
+      quantity--;
     }
   };
 
-  const removeFromCart = () => {
-    setQuantity(0);
-  };
   return (
     <div
       className="card border border-3 rounded"
@@ -62,7 +60,7 @@ const CartItem = (props) => {
         </li>
       </ul>
       <div className="card-footer d-flex justify-content-between">
-        <button className="btn btn-danger btn-sm" onClick={removeFromCart}>
+        <button className="btn btn-danger btn-sm" onClick={() => removeFromCart(name)}>
           Remove
         </button>
       </div>
