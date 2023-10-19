@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "../styles/Stars.css";
 
 const Cart = (props) => {
   const { name, price, img, makeCart, currentCart } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
-  const total = price.toFixed(2);
+  const [total,setTotal] = useState(price.toFixed(2));
 
+  // Update total when quantity changes
+  useEffect(() => {
+    setTotal((price * quantity).toFixed(2));
+  }, [quantity]);
+  
   const cartAddition = (name, price, img) => {
     const existingProduct = currentCart.find(
       (product) => product.name === name,
