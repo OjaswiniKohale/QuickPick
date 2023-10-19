@@ -30,9 +30,9 @@ const Product = ({ currentCart, makeCart }) => {
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR82MKjFVD-3AbBiqjyEvcWtBso2DSSBurtVQ&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUih5ltcKB09rRsyCPA0TQg4aXoMyXfRWiuw&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkSL8bkSQzXQaYs3yqtdq5J3JuyItAq9k0jQ&usqp=CAU",
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBtI_OFRR6BCr02XPAw25P-GpbzCSsbHOf_w&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMKK04OST8DPRGoF0JLEM6W1QeNRZTHU60bqwJ_da5cusdW53aatgpfAS_oJrPphKukqU&usqp=CAU",
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvNmhh8-_fSaOPRMWjB9V0hIgb-np1n3eleQ&usqp=CAU",
+    "https://m.media-amazon.com/images/I/71LyKlizpuL._AC_UF1000,1000_QL80_.jpg",
   ];
 
   const cookies = [
@@ -66,17 +66,6 @@ const Product = ({ currentCart, makeCart }) => {
     "https://www.netmeds.com/images/product-v1/600x600/410290/dettol_liquid_handwash_original_200_ml_52183_0_1.jpg",
     "https://ml0co0iaphua.i.optimole.com/w:1000/h:1000/q:mauto/f:avif/https://gharstuff.com/wp-content/uploads/2018/11/Tide-Plus-Extra-Power-Jasmine-Rose-Detergent-Powder-500g-2.jpg",
     "https://www.bigbasket.com/media/uploads/p/l/40173107_5-bb-home-naphthalene-balls.jpg",
-  ];
-
-  const beverages = [
-    "https://5.imimg.com/data5/FW/XJ/VA/SELLER-30759087/real-mixed-fruit-juice.jpg",
-    "https://www.justgotochef.com/uploads/1538570082-Tropicana-Orange%20%20Juice-Front.jpg",
-    "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/products/sliding_image/20143a.jpg?ts=1687525090",
-    "https://img5.hkrtcdn.com/17188/prd_1718784-Alo-Frut-Mixed-Fruit-Aloevera-Juice-1-L-Mixed-Fruit_o.jpg",
-    "https://www.hi5mart.com/image/cache/catalog/DRINKS%20AND%20BEVERAGES/Coca%20Cola/Coca%20Cola%20Soft%20Drink,%20750%20ml%20Bottle-750x750.jpg",
-    "https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=360/app/images/products/sliding_image/312a.jpg?ts=1678183838",
-    "https://images-eu.ssl-images-amazon.com/images/I/51C8U7H-+6L._AC_UL330_SR330,330_.jpg",
-    "https://www.bigbasket.com/media/uploads/p/l/20003889_3-godrej-jersey-flavoured-milk-pista.jpg",
   ];
 
   const fresheners = [
