@@ -29,7 +29,7 @@ const Navbar = () => {
                 <Search sx={{color:"black", display:"flex", justifyContent:"flexstart", alignItems: "center" }}><InputBase placeholder='search...' sx={{width: "100%"}}/></Search>
                 <Icons>
                 <Link to="/Cart">
-                    <Badge badgeContent={4} color="primary" sx={{ marginRight: "1.2rem", fontSize: "4rem"}}>
+                    <Badge color="primary" sx={{ marginRight: "1.2rem", fontSize: "4rem"}}>
                         <ShoppingCartIcon color="action" sx={{fontSize: "2rem", color: "#F57F17" }}/>
                     </Badge>
                 </Link>

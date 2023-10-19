@@ -95,17 +95,16 @@ const Cart = (props) => {
           </div>
         </li>
       </ul>
-      <div className="card-footer d-flex justify-content-between">
-        <button className="btn btn-danger btn-sm" onClick={removeFromCart}>
-          Remove
-        </button>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => cartAddition(name, total, img)}
-        >
-          Add to Cart
-        </button>
-      </div>
+      <div className="card-footer d-flex justify-content-center align-items-center">
+  <button
+    className="btn btn-primary btn-sm"
+    style={{ margin: '0 auto' }}
+    onClick={() => cartAddition(name, total, img)}
+  >
+    Add to Cart
+  </button>
+</div>
+
       <ul className="list-group">
         <li className="list-group-item">
           <div className="mb-3">
