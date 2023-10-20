@@ -42,10 +42,7 @@ export default function SignUp() {
       password: data.get("password"),
     };
     try {
-      const response = await axios.post(
-        "YOUR_BACKEND_API_URL/signup",
-        formData,
-      );
+      const response = await axios.post("api/v1/signup", formData);
       console.log(response.data); // Handle the response data from the server
     } catch (error) {
       console.error("Error:", error);

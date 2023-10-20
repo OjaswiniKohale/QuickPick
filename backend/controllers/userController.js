@@ -27,7 +27,7 @@ module.exports = {
         const hashPassword = await bcrypt.hash(password, saltRounds);
 
         await pool.execute(
-          "INSERT INTO customer (first_name, middle_name, last_name, email, phone, password) VALUES (?, ?, ?, ?, ?, ?)",
+          "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)",
           [firstName, middleName, lastName, email, phone, hashPassword],
         );
 
