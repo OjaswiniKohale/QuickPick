@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
 const loadConfig = require("../config/loadConfig");
 const config = loadConfig();
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 module.exports = {
   signup: async (req, res) => {
@@ -67,9 +69,14 @@ module.exports = {
       if (rows.length === 0) {
         res.status(400).json({ message: "This email has not registered" });
       } else {
-        const match = await bcrypt.compare(rows.password, password); // Remaining: Check rows object
+        const match = await bcrypt.compare(rows[0].password, password); // Remaining: Check rows object
 
         if (match) {
+          const payload = { userId: email };
+          const token = jwt.sign(payload, config.server.JWT_SECRET, {
+            expiresIn: "1h",
+          });
+          res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
           res.status(200).json({ message: "success" });
         } else {
           res.status(400).json({ message: "Incorrect password entered" });

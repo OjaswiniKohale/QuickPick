@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -30,6 +31,7 @@ function Copyright(props) {
 }
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,7 +45,9 @@ export default function SignUp() {
     };
     try {
       const response = await axios.post("api/v1/signup", formData);
-      console.log(response.data); // Handle the response data from the server
+      if (response.data.message === "User registered successfully") {
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Error:", error);
     }

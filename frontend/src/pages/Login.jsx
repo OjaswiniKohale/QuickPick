@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,6 +10,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -29,13 +31,26 @@ function Copyright(props) {
 }
 
 export default function Login() {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const formData = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+    try {
+      const response = await axios.post("/api/v1/login", formData);
+
+      if (response.data.message === "success") {
+        //navigate(); //Todo
+        console.log("Yay");
+      } else {
+        // Todo
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
 
   return (
@@ -76,10 +91,6 @@ export default function Login() {
             id="password"
             autoComplete="current-password"
           />
-          {/* <FormControlLabel
-						control={<Checkbox value="remember" color="primary" />}
-						label="Remember me"
-					/> */}
           <Button
             type="submit"
             fullWidth
