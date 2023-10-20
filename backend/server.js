@@ -2,8 +2,10 @@ const app = require("./app.js");
 const path = require("path");
 const loadConfig = require("./config/loadConfig.js");
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 app.use("/api/v1", userRoutes);
+app.use("/api/v1", productRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
