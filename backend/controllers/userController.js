@@ -25,10 +25,18 @@ module.exports = {
         // Check if the email is not already in use
         const saltRounds = 10;
         const hashPassword = await bcrypt.hash(password, saltRounds);
-
+        const currentDate = new Date().toISOString().slice(0, 10);
         await pool.execute(
-          "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)",
-          [firstName, middleName, lastName, email, phone, hashPassword],
+          "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+          [
+            firstName,
+            middleName,
+            lastName,
+            email,
+            phone,
+            currentDate,
+            hashPassword,
+          ],
         );
 
         res.status(200).json({ message: "User registered successfully" });
