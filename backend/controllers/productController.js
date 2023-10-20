@@ -15,14 +15,9 @@ module.exports = {
       // Verify the token
       const decoded = jwt.verify(token, config.server.JWT_SECRET);
 
-      const pool = await mysql.createPool({
-        host: config.database.HOST,
-        user: config.database.USERNAME,
-        database: config.database.NAME,
-        password: config.database.PASSWORD, // Add your MySQL password here
-      });
+      const pool = req.pool;
 
-      const { category } = req.params;
+      const category = req.query.category;
 
       const [rows] = await pool.execute(
         "SELECT name, image_url, price FROM product WHERE category = ?",

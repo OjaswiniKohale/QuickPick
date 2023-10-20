@@ -10,12 +10,7 @@ module.exports = {
     const { firstName, middleName, lastName, email, phone, password } =
       req.body;
 
-    const pool = await mysql.createPool({
-      host: config.database.HOST,
-      user: config.database.USERNAME,
-      database: config.database.NAME,
-      password: config.database.PASSWORD, // Add your MySQL password here
-    });
+    const pool = req.pool;
 
     try {
       const [rows, fields] = await pool.execute(
@@ -53,12 +48,7 @@ module.exports = {
   login: async (req, res) => {
     const { email, password } = req.body;
 
-    const pool = await mysql.createPool({
-      host: config.database.HOST,
-      user: config.database.USERNAME,
-      database: config.database.NAME,
-      password: config.database.PASSWORD, // Add your MySQL password here
-    });
+    const pool = req.pool;
 
     try {
       const [rows, fields] = await pool.execute(

@@ -16,9 +16,11 @@ const Product = ({ currentCart, makeCart }) => {
       const response = await axios.get("/api/v1/getToken");
 
       if (response.data.message === "Token exists") {
-        const productObject = await axios.get(
-          `/api/v1/products?category=${state.category}`,
-        );
+        const productObject = await axios.get("/api/v1/products", {
+          params: {
+            category: state.category,
+          },
+        });
 
         if (productObject.data.products) {
           setProducts(productObject.data.products);
