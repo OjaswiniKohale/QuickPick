@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2/promise");
+const loadConfig = require("../config/loadConfig");
+const config = loadConfig();
 
 module.exports = {
   signup: async (req, res) => {
@@ -7,10 +9,10 @@ module.exports = {
       req.body;
 
     const pool = await mysql.createPool({
-      host: "mysql-service",
-      user: "root",
-      database: "quickpickdb",
-      password: "root", // Add your MySQL password here
+      host: config.database.HOST,
+      user: config.database.USERNAME,
+      database: config.database.NAME,
+      password: config.database.PASSWORD, // Add your MySQL password here
     });
 
     try {
@@ -40,15 +42,16 @@ module.exports = {
   },
   login: async (req, res) => {
     const { email, password } = req.body;
-    const connection = await mysql.createConnection({
-      host: "mysql-service",
-      user: "root",
-      database: "quickpickdb",
-      password: "your_mysql_password", // Add your MySQL password here
+
+    const pool = await mysql.createPool({
+      host: config.database.HOST,
+      user: config.database.USERNAME,
+      database: config.database.NAME,
+      password: config.database.PASSWORD, // Add your MySQL password here
     });
 
     try {
-      const [rows, fields] = await connection.execute(
+      const [rows, fields] = await pool.execute(
         "SELECT password FROM customer WHERE email = ?",
         [email],
       );
