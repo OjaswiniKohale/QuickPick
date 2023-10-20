@@ -7,7 +7,7 @@ module.exports = {
       req.body;
 
     const pool = await mysql.createPool({
-      host: "localhost",
+      host: "mysql-service",
       user: "root",
       database: "quickpickdb",
       password: "root", // Add your MySQL password here
@@ -41,7 +41,7 @@ module.exports = {
   login: async (req, res) => {
     const { email, password } = req.body;
     const connection = await mysql.createConnection({
-      host: "localhost",
+      host: "mysql-service",
       user: "root",
       database: "quickpickdb",
       password: "your_mysql_password", // Add your MySQL password here
