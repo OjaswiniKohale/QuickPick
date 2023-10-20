@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Fruit from "../components/HomePage/Fruit";
 import Snack from "../components/HomePage/Snack";
 import Cleaning from "../components/HomePage/Cleaning";
@@ -6,10 +6,8 @@ import Cleaning from "../components/HomePage/Cleaning";
 import GoToTop from "../components/Scrollup/scrollup";
 
 const HomePage = () => {
-  
   return (
     <div>
-
       {/* <Newlaunch /> */}
       {/* <Mybasket /> */}
       {/* <Bank /> */}
@@ -18,7 +16,7 @@ const HomePage = () => {
       <Fruit />
       {/* <Beverage /> */}
       <Snack />
-      
+
       <Cleaning />
       {/* <Beauty /> */}
       {/* <Kitchen /> */}
@@ -26,10 +24,10 @@ const HomePage = () => {
       {/* <Brand /> */}
       {/* <Featured /> */}
       {/* <Bigonline /> */}
-      <GoToTop/>
+      <GoToTop />
     </div>
-    
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
+

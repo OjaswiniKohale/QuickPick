@@ -60,7 +60,6 @@
 //         </div>
 //       </div>
 
-
 //     </div>
 //   );
 // };
@@ -72,7 +71,7 @@ import CartItem from "../components/CartItem";
 
 export const CartPage = ({ currentCart, makeCart }) => {
   const updateQuantity = (name, newQuantity) => {
-       const updatedCart = currentCart.map((product) => {
+    const updatedCart = currentCart.map((product) => {
       if (product.name === name) {
         return {
           ...product,
@@ -85,7 +84,7 @@ export const CartPage = ({ currentCart, makeCart }) => {
   };
 
   const removeFromCart = (name) => {
-        const existingProduct = currentCart.find(
+    const existingProduct = currentCart.find(
       (product) => product.name === name,
     );
     let updatedCart;
@@ -143,4 +142,3 @@ export const CartPage = ({ currentCart, makeCart }) => {
 };
 
 export default CartPage;
-

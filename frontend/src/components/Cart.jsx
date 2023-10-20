@@ -1,17 +1,17 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Stars.css";
 
 const Cart = (props) => {
   const { name, price, img, makeCart, currentCart } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
-  const [total,setTotal] = useState(price.toFixed(2));
+  const [total, setTotal] = useState(price.toFixed(2));
 
   // Update total when quantity changes
   useEffect(() => {
     setTotal((price * quantity).toFixed(2));
   }, [quantity]);
-  
+
   const cartAddition = (name, price, img) => {
     const existingProduct = currentCart.find(
       (product) => product.name === name,
@@ -101,14 +101,14 @@ const Cart = (props) => {
         </li>
       </ul>
       <div className="card-footer d-flex justify-content-center align-items-center">
-  <button
-    className="btn btn-primary btn-sm"
-    style={{ margin: '0 auto' }}
-    onClick={() => cartAddition(name, total, img)}
-  >
-    Add to Cart
-  </button>
-</div>
+        <button
+          className="btn btn-primary btn-sm"
+          style={{ margin: "0 auto" }}
+          onClick={() => cartAddition(name, total, img)}
+        >
+          Add to Cart
+        </button>
+      </div>
 
       <ul className="list-group">
         <li className="list-group-item">
