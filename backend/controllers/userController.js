@@ -69,10 +69,10 @@ module.exports = {
       if (rows.length === 0) {
         res.status(400).json({ message: "This email has not registered" });
       } else {
-        const match = await bcrypt.compare(rows[0].password, password); // Remaining: Check rows object
+        const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
 
         if (match) {
-          const payload = { userId: email };
+          const payload = { email: email };
           const token = jwt.sign(payload, config.server.JWT_SECRET, {
             expiresIn: "1h",
           });
