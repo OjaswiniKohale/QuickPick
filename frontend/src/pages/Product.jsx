@@ -30,6 +30,7 @@ const Product = ({ currentCart, makeCart }) => {
       console.log("Error: ", error);
     }
   };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Product Page</h1>

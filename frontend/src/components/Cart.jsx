@@ -12,31 +12,24 @@ const Cart = (props) => {
     setTotal((price * quantity).toFixed(2));
   }, [quantity]);
 
-  const cartAddition = (name, price, img) => {
-    const existingProduct = currentCart.find(
-      (product) => product.name === name,
-    );
-    let updatedCart;
-    if (!existingProduct) {
-      updatedCart = [
-        ...currentCart,
-        {
-          name,
-          price,
-          img,
-          quantity,
-        },
-      ];
-    } else {
-      updatedCart = [...currentCart];
+  const cartAddition = async (name, totalPrice, img) => {
+    const data = {
+      name: name,
+      totalPrice: totalPrice,
+      img: img,
+      quantity: quantity,
+    };
+    try {
+      console.log("I am being called");
+      const response = await axios.post("/api/v1/addToCart", data);
+      console.log(response.data.message);
 
-      for (let item of updatedCart) {
-        if (item.name === existingProduct.name) {
-          item.quantity += quantity;
-        }
+      if (response.data.message === "Added to cart") {
+        console.log("Yay");
       }
+    } catch (error) {
+      // Todo
     }
-    makeCart(updatedCart);
   };
 
   const increaseQuantity = () => {

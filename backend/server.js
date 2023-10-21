@@ -4,6 +4,7 @@ const mysql = require("mysql2/promise");
 const loadConfig = require("./config/loadConfig.js");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 const config = loadConfig();
 
 const pool = mysql.createPool({
@@ -19,8 +20,10 @@ app.use((req, res, next) => {
   req.pool = pool;
   next();
 });
+
 app.use("/api/v1", userRoutes);
 app.use("/api/v1", productRoutes);
+app.use("/api/v1", cartRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
