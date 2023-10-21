@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Stars.css";
+import axios from "axios";
 
 const Cart = (props) => {
   const { name, price, img, makeCart, currentCart } = props;
@@ -28,7 +29,7 @@ const Cart = (props) => {
         console.log("Yay");
       }
     } catch (error) {
-      // Todo
+      console.log(error);
     }
   };
 

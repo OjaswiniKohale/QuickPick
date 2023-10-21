@@ -41,17 +41,22 @@ module.exports = {
       if (cartRows.length > 0) {
         await pool.execute(
           "UPDATE shopping_cart SET no_of_products = ? WHERE product_id = ?",
-          [quantity + prodRows[0].no_of_products, prodRows[0].product_id],
+          [quantity + cartRows[0].no_of_products, prodRows[0].product_id],
         );
         await pool.execute(
           "UPDATE shopping_cart SET total_price = ? WHERE product_id = ?",
-          [totalPrice + prodRows[0].total_price, prodRows[0].product_id],
+          [totalPrice + cartRows[0].total_price, prodRows[0].product_id],
         );
         res.status(200).json({ message: "Added to cart" });
       } else {
         await pool.execute(
-          "INSERT INTO shopping_cart(no_of_products, total_price, customer_id) VALUES (?, ?, ?)",
-          [quantity, totalPrice, custRows[0].customer_id],
+          "INSERT INTO shopping_cart(product_id, no_of_products, total_price, customer_id) VALUES (?, ?, ?, ?)",
+          [
+            prodRows[0].product_id,
+            quantity,
+            totalPrice,
+            custRows[0].customer_id,
+          ],
         );
         res.status(200).json({ message: "Added to cart" });
       }
