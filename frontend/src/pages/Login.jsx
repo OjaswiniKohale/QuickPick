@@ -31,6 +31,8 @@ function Copyright(props) {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,8 +45,7 @@ export default function Login() {
       const response = await axios.post("/api/v1/login", formData);
 
       if (response.data.message === "success") {
-        //navigate(); //Todo
-        console.log("Yay");
+        navigate("/");
       } else {
         // Todo
       }
