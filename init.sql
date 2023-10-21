@@ -184,7 +184,7 @@ values(
 
 insert into product(
 category, description, name, image_url, price
-) 
+)
 values(
 'Sweets', '500 Rs for 200gm','Ferrero Rocher',
 'https://m.media-amazon.com/images/I/81JugTbWdzL.jpg', 500
