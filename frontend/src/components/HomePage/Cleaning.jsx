@@ -4,7 +4,7 @@ import cleaners from "../../assets/cleaners.png";
 import { Link } from "react-router-dom";
 
 const Cleaning = () => {
-  const category = ["Cleaners", "Freshners"];
+  const category = ["Cleaners", "Fresheners"];
   return (
     <>
       <h1 className="myb">Cleaning & Household</h1>

@@ -52,7 +52,7 @@ module.exports = {
 
     try {
       const [rows, fields] = await pool.execute(
-        "SELECT password FROM customer WHERE email = ?",
+        "SELECT customer_id, password FROM customer WHERE email = ?",
         [email],
       );
 
@@ -62,11 +62,23 @@ module.exports = {
         const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
 
         if (match) {
+          const customerId = rows[0].customer_id;
           const payload = { email: email };
           const token = jwt.sign(payload, config.server.JWT_SECRET, {
             expiresIn: "1h",
           });
           res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+
+          const [productRows] = await pool.execute(
+            "SELECT product_id FROM product",
+          );
+
+          for (const row of productRows) {
+            await pool.execute(
+              "UPDATE product SET customer_id = ? WHERE product_id = ?",
+              [customerId, row.product_id],
+            );
+          }
           res.status(200).json({ message: "success" });
         } else {
           res.status(400).json({ message: "Incorrect password entered" });
