@@ -1,2 +1,9 @@
 server:
-    port: 3000
+    PORT: 3000
+    JWT_SECRET: 'a7f07643cdc0f503596d5a28390b678c653a4dd0060edf328d86ebc7ca2c3578b720ed503aa8f67d6d41d1913c11993437334ebe88e7cb4ab22f70216d5a8493'
+database:
+    HOST: localhost
+    PORT: 3306
+    NAME: quickpickdb
+    USERNAME: root
+    PASSWORD: 'parshva@2003'

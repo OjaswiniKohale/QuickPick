@@ -55,13 +55,6 @@ create table payment (
     payment_amount float not null
 );
 
-create table shopping_cart (
-    no_of_products int,
-    total_price float,
-    customer_id int,
-    foreign key (customer_id) references customer(customer_id)
-);
-
 create table inventory (
     stock_id int primary key unique auto_increment,
     quantity int,
@@ -81,6 +74,20 @@ create table product (
     foreign key (customer_id) references customer(customer_id),
     stock_id int,
     foreign key (stock_id) references inventory(stock_id)
+);
+
+create table shopping_cart (
+	cart_id int primary key not null unique auto_increment,
+    customer_id int,
+    foreign key (customer_id) references customer(customer_id)
+);
+create table cart_items(
+	cart_id int,
+	product_id int,
+    quantity int,
+    total_price float,
+	foreign key (cart_id) references shopping_cart(cart_id),
+	foreign key (product_id) references product(product_id)
 );
 
 create table reviews (
@@ -184,7 +191,7 @@ values(
 
 insert into product(
 category, description, name, image_url, price
-)
+) 
 values(
 'Sweets', '500 Rs for 200gm','Ferrero Rocher',
 'https://m.media-amazon.com/images/I/81JugTbWdzL.jpg', 500
