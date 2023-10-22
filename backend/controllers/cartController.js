@@ -94,13 +94,45 @@ module.exports = {
       );
 
       const [returnCartRows] = await pool.execute(
-        "SELECT p.name, p.image_url, c.total_price, c.quantity FROM product p NATURAL JOIN cart_items c WHERE c.cart_id =(select cart_id from shopping_cart where customer_id=?)",
+        "SELECT p.product_id, p.name, p.image_url, c.total_price, c.quantity FROM product p NATURAL JOIN cart_items c WHERE c.cart_id =(select cart_id from shopping_cart where customer_id=?)",
         [custRows[0].customer_id]
       );
     
 
       res.status(200).json({ cartProducts: returnCartRows });
     } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  removeFromCart: async(req,res) => {
+    const token = req.cookies.token; // Token is stored in a cookie named 'token'
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    try {
+      const decoded = jwt.verify(token, config.server.JWT_SECRET);
+      const email = decoded.email;
+      const {pid} = req.body;
+      const pool = req.pool;
+      const [custRows] = await pool.execute(
+        "SELECT customer_id FROM customer WHERE email = ?",
+        [email]
+      );
+      const [shoppingCartRows] = await pool.execute(
+        "SELECT cart_id FROM shopping_cart WHERE customer_id=?",
+        [custRows[0].customer_id],
+      );
+      await pool.execute(
+        "DELETE FROM cart_items WHERE product_id=? and cart_id=?",
+        [pid,shoppingCartRows[0].cart_id],
+      )
+      res.status(200).json({ message: "Successfully Deleted" });
+    }
+    catch(error)
+    {
+      console.log(error)
       res.status(500).json({ message: "Internal server error" });
     }
   },

@@ -1,9 +1,11 @@
 import React from "react";
 import { useState } from "react";
-const CartItem = (props) => {
-  const { name, price, img, quantity, setQuantity, removeFromCart } = props;
-  const total =  (price).toFixed(2);
+import axios from "axios";
 
+const CartItem = (props) => {
+  const { pid, name, price, img, quantity, setQuantity, refresh, setRefresh } = props;
+  const total =  (price).toFixed(2);
+  
   const increaseQuantity = (name) => {
     setQuantity(name, quantity + 1);
   };
@@ -11,6 +13,23 @@ const CartItem = (props) => {
   const decreaseQuantity = (name) => {
     if (quantity > 1) {
       setQuantity(name, quantity - 1);
+    }
+  };
+
+  const removeFromCart = async() =>{
+    try{
+      const response = await axios.post("/api/v1/removeFromCart",{
+        pid : pid
+      })
+      if(response.data.message==="Successfully Deleted")
+      {
+        console.log(refresh)
+        setRefresh(refresh ? false : true);
+      }
+    }
+    catch(error)
+    {
+      console.log("Error: ",error)
     }
   };
 

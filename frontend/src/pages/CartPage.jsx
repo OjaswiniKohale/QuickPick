@@ -5,9 +5,11 @@ import axios from "axios";
 
 export const CartPage = ({ currentCart, makeCart }) => {
   const [cart, setCart] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     fetchCart();
-  },[]);
+  },[refresh]);
 
   const fetchCart = async () => {
     try {
@@ -74,12 +76,13 @@ export const CartPage = ({ currentCart, makeCart }) => {
               key={index}
             >
               <CartItem
+                pid={product.product_id}
                 price={product.total_price}
                 name={product.name}
                 img={product.image_url}
                 quantity={product.quantity}
-                setQuantity={updateQuantity}
-                removeFromCart={removeFromCart}
+                refresh={refresh}
+                setRefresh={setRefresh}
               />
             </div>
           ))}
