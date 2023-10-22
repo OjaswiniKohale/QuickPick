@@ -82,7 +82,7 @@ module.exports = {
       );
 
       const [returnCartRows] = await pool.execute(
-        "SELECT p.name, p.image_url, c.total_price, c.no_of_products FROM product p INNER JOIN shopping_cart c ON p.customer_id = c.customer_id WHERE p.customer_id = ?",
+        "SELECT p.name, p.image_url, c.total_price, c.no_of_products FROM product p NATURAL JOIN shopping_cart c WHERE p.customer_id = ?",
         [custRows[0].customer_id],
       );
 
