@@ -7,7 +7,7 @@ export const CartPage = ({ currentCart, makeCart }) => {
   const [cart, setCart] = useState([]);
   useEffect(() => {
     fetchCart();
-  });
+  },[]);
 
   const fetchCart = async () => {
     try {

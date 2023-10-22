@@ -22,6 +22,7 @@ module.exports = {
         "SELECT customer_id FROM customer WHERE email = ?",
         [email],
       );
+      console.log(custRows[0])
 
       await pool.execute(
         "UPDATE product SET customer_id = ? WHERE name = ? AND image_url = ?",
@@ -47,6 +48,7 @@ module.exports = {
           "UPDATE shopping_cart SET total_price = ? WHERE product_id = ?",
           [totalPrice + cartRows[0].total_price, prodRows[0].product_id],
         );
+        console.log(cartRows[0])
         res.status(200).json({ message: "Added to cart" });
       } else {
         await pool.execute(
@@ -85,6 +87,8 @@ module.exports = {
         "SELECT p.name, p.image_url, c.total_price, c.no_of_products FROM product p NATURAL JOIN shopping_cart c WHERE p.customer_id = ?",
         [custRows[0].customer_id],
       );
+      // console.log(returnCartRows)
+      
 
       res.status(200).json({ cartProducts: returnCartRows });
     } catch (error) {
