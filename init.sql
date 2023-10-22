@@ -70,8 +70,6 @@ create table product (
     name varchar(50),
     image_url varchar(200),
     price float,
-    customer_id int,
-    foreign key (customer_id) references customer(customer_id),
     stock_id int,
     foreign key (stock_id) references inventory(stock_id)
 );

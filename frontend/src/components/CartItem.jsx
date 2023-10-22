@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 const CartItem = (props) => {
   const { name, price, img, quantity, setQuantity, removeFromCart } = props;
-  const total = (quantity * price).toFixed(2);
+  const total =  (price).toFixed(2);
 
   const increaseQuantity = (name) => {
     setQuantity(name, quantity + 1);
@@ -27,7 +27,7 @@ const CartItem = (props) => {
       />
       <div className="card-body">
         <h5 className="card-title">{name}</h5>
-        <p className="card-text text-muted">Rs.{price} per item</p>
+        <p className="card-text text-muted">Rs.{price/quantity} per item</p>
       </div>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">

@@ -77,7 +77,7 @@ export const CartPage = ({ currentCart, makeCart }) => {
                 price={product.total_price}
                 name={product.name}
                 img={product.image_url}
-                quantity={product.no_of_products}
+                quantity={product.quantity}
                 setQuantity={updateQuantity}
                 removeFromCart={removeFromCart}
               />
@@ -87,7 +87,7 @@ export const CartPage = ({ currentCart, makeCart }) => {
       </div>
 
       <div className="total-cost">
-        Total Cost: ${calculateTotalCost().toFixed(2)}
+        Total Cost: Rs.{calculateTotalCost().toFixed(2)}
       </div>
     </div>
   );

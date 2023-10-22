@@ -20,45 +20,55 @@ module.exports = {
 
       const [custRows] = await pool.execute(
         "SELECT customer_id FROM customer WHERE email = ?",
-        [email],
+        [email]
       );
-      console.log(custRows[0])
+      console.log(custRows[0]);
 
-      await pool.execute(
-        "UPDATE product SET customer_id = ? WHERE name = ? AND image_url = ?",
-        [custRows[0].customer_id, name, img],
+      let [selectCartRows] = await pool.execute(
+        "SELECT cart_id FROM shopping_cart WHERE customer_id = ?",
+        [custRows[0].customer_id]
       );
+
+      if (selectCartRows.length === 0) {
+        await pool.execute(
+          "INSERT INTO shopping_cart(customer_id) values (?)",
+          [custRows[0].customer_id]
+        );
+        [selectCartRows] = await pool.execute(
+          "SELECT cart_id FROM shopping_cart WHERE customer_id = ?",
+          [custRows[0].customer_id]
+        );
+      }
 
       const [prodRows] = await pool.execute(
         "SELECT product_id FROM product WHERE name = ? AND image_url = ?",
-        [name, img],
+        [name, img]
       );
 
-      const [cartRows] = await pool.execute(
-        "SELECT product_id, no_of_products, total_price FROM shopping_cart WHERE product_id = ?",
-        [prodRows[0].product_id],
+      const [itemExistsRows] = await pool.execute(
+        "SELECT * FROM cart_items WHERE product_id=? AND cart_id=?",
+        [prodRows[0].product_id, selectCartRows[0].cart_id]
       );
 
-      if (cartRows.length > 0) {
+      if (itemExistsRows.length === 0) {
         await pool.execute(
-          "UPDATE shopping_cart SET no_of_products = ? WHERE product_id = ?",
-          [quantity + cartRows[0].no_of_products, prodRows[0].product_id],
-        );
-        await pool.execute(
-          "UPDATE shopping_cart SET total_price = ? WHERE product_id = ?",
-          [totalPrice + cartRows[0].total_price, prodRows[0].product_id],
-        );
-        console.log(cartRows[0])
-        res.status(200).json({ message: "Added to cart" });
-      } else {
-        await pool.execute(
-          "INSERT INTO shopping_cart(product_id, no_of_products, total_price, customer_id) VALUES (?, ?, ?, ?)",
+          "INSERT into cart_items (cart_id,product_id,quantity,total_price) values (?,?,?,?)",
           [
+            selectCartRows[0].cart_id,
             prodRows[0].product_id,
             quantity,
             totalPrice,
-            custRows[0].customer_id,
-          ],
+          ]
+        );
+        res.status(200).json({ message: "Added to cart" });
+      } else {
+        await pool.execute(
+          "UPDATE cart_items set quantity =? where cart_id=? and product_id=?",
+          [itemExistsRows[0].quantity + quantity]
+        );
+        await pool.execute(
+          "UPDATE cart_items set total_price =? where cart_id=? and product_id=?",
+          [itemExistsRows[0].total_price + totalPrice]
         );
         res.status(200).json({ message: "Added to cart" });
       }
@@ -80,15 +90,14 @@ module.exports = {
 
       const [custRows] = await pool.execute(
         "SELECT customer_id FROM customer WHERE email = ?",
-        [email],
+        [email]
       );
 
       const [returnCartRows] = await pool.execute(
-        "SELECT p.name, p.image_url, c.total_price, c.no_of_products FROM product p NATURAL JOIN shopping_cart c WHERE p.customer_id = ?",
-        [custRows[0].customer_id],
+        "SELECT p.name, p.image_url, c.total_price, c.quantity FROM product p NATURAL JOIN cart_items c WHERE c.cart_id =(select cart_id from shopping_cart where customer_id=?)",
+        [custRows[0].customer_id]
       );
-      // console.log(returnCartRows)
-      
+    
 
       res.status(200).json({ cartProducts: returnCartRows });
     } catch (error) {
