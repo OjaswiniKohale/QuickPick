@@ -13,13 +13,15 @@ import Typography from "@mui/material/Typography";
 import AddressForm from "../components/Address";
 import PaymentForm from "../components/PaymentForm";
 import Review from "../components/Review";
+import axios from "axios";
+import { useState } from "react";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        QuickPick
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -29,10 +31,10 @@ function Copyright() {
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
-function getStepContent(step) {
+function getStepContent(step,setAddress,setCity,setPincode,setState) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <AddressForm setAddress={setAddress} setCity={setCity} setPincode={setPincode} setState={setState}/>;
     case 1:
       return <PaymentForm />;
     case 2:
@@ -43,10 +45,21 @@ function getStepContent(step) {
 }
 
 export default function Checkout() {
+  const [address,setAddress] = useState("")
+  const [pincode,setPincode] = useState("")
+  const [city,setCity] = useState("")
+  const [state,setState] = useState("")
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const handleFirstNext = async() => {
+    const fullAddress = `${address}, ${city}, ${state} - ${pincode}`;
+    console.log(fullAddress)
+    const response = await axios.post("/api/v1/checkoutcart", {
+      address:fullAddress,
+    });
+    if (response.data.message === "Successfully got the address"){
+      setActiveStep(activeStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -93,7 +106,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep)}
+              {getStepContent(activeStep,setAddress,setCity,setPincode,setState)}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -103,9 +116,10 @@ export default function Checkout() {
 
                 <Button
                   variant="contained"
-                  onClick={handleNext}
+                  onClick={activeStep === 0 ? handleFirstNext: () => {}}
                   sx={{ mt: 3, ml: 1 }}
                 >
+                  
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
                 </Button>
               </Box>

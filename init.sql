@@ -30,7 +30,7 @@ create table customer (
     first_name varchar(30) not null,
     middle_name varchar(30),
     last_name varchar(30) not null,
-    address varchar(50) not null default '',
+    address varchar(300) not null default '',
     email varchar(30) unique not null,
     password varchar(100) not null,
     phone_number bigint unique not null,

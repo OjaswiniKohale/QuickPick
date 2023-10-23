@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/cart.css";
 import CartItem from "../components/CartItem";
 import axios from "axios";
-
+import {Link} from 'react-router-dom'
 export const CartPage = ({ currentCart, makeCart }) => {
   const [cart, setCart] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -21,34 +21,6 @@ export const CartPage = ({ currentCart, makeCart }) => {
     } catch (error) {
       // Todo
       console.log(error);
-    }
-  };
-
-  const updateQuantity = (name, newQuantity) => {
-    const updatedCart = currentCart.map((product) => {
-      if (product.name === name) {
-        return {
-          ...product,
-          quantity: newQuantity, // Update the quantity
-        };
-      }
-      return product;
-    });
-    makeCart(updatedCart);
-  };
-
-  const removeFromCart = (name) => {
-    const existingProduct = currentCart.find(
-      (product) => product.name === name,
-    );
-    let updatedCart;
-    if (existingProduct) {
-      updatedCart = [...currentCart];
-
-      updatedCart = updatedCart.filter(
-        (item) => item.name !== existingProduct.name,
-      );
-      makeCart(updatedCart);
     }
   };
 
@@ -92,6 +64,13 @@ export const CartPage = ({ currentCart, makeCart }) => {
       <div className="total-cost">
         Total Cost: Rs.{calculateTotalCost().toFixed(2)}
       </div>
+      <Link to='/checkout'>
+      <div>
+            <button className="btn btn-primary mt-4">
+              Checkout
+            </button>
+      </div>
+      </Link>
     </div>
   );
 };
