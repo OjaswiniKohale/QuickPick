@@ -3,16 +3,46 @@ import { useState } from "react";
 import axios from "axios";
 
 const CartItem = (props) => {
-  const { pid, name, price, img, quantity, setQuantity, refresh, setRefresh } = props;
+  const { pid, name, price, img, quantity, refresh, setRefresh } = props;
   const total =  (price).toFixed(2);
   
-  const increaseQuantity = (name) => {
-    setQuantity(name, quantity + 1);
+  const increaseQuantity = async() => {
+    try{
+      const response = await axios.post("/api/v1/updateQuantity",{
+        pid : pid,
+        increaseQuantity: true,
+        unitPrice : price/quantity,
+      })
+      if(response.data.message==="Successfully Updated Quantity")
+      {
+        setRefresh(refresh ? false : true);
+      }
+    }
+    catch(error)
+    {
+      console.log("Error: ",error)
+    }
+   
   };
 
-  const decreaseQuantity = (name) => {
+  const decreaseQuantity = async() => {
     if (quantity > 1) {
-      setQuantity(name, quantity - 1);
+      try{
+        const response = await axios.post("/api/v1/updateQuantity",{
+          pid : pid,
+          increaseQuantity: false,
+          unitPrice : price/quantity,
+        })
+        if(response.data.message==="Successfully Updated Quantity")
+        {
+          setRefresh(refresh ? false : true);
+        }
+      }
+      catch(error)
+      {
+        console.log("Error: ",error)
+      }
+      
     }
   };
 
@@ -55,14 +85,14 @@ const CartItem = (props) => {
             <div className="input-group">
               <button
                 className="btn btn-outline-danger btn-sm"
-                onClick={() => decreaseQuantity(name)}
+                onClick={() => decreaseQuantity()}
               >
                 -
               </button>
               <span className="input-group-text">{quantity}</span>
               <button
                 className="btn btn-outline-success btn-sm"
-                onClick={() => increaseQuantity(name)}
+                onClick={() => increaseQuantity()}
               >
                 +
               </button>
@@ -88,3 +118,4 @@ const CartItem = (props) => {
   );
 };
 export default CartItem;
+

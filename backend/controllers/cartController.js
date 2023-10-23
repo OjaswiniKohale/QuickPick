@@ -106,7 +106,7 @@ module.exports = {
   },
 
   removeFromCart: async(req,res) => {
-    const token = req.cookies.token; // Token is stored in a cookie named 'token'
+    const token = req.cookies.token; // Token is stored in a cookie named 'token'  
 
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -135,5 +135,55 @@ module.exports = {
       console.log(error)
       res.status(500).json({ message: "Internal server error" });
     }
+  },
+   updateQuantity: async(req,res)=>{
+    const token = req.cookies.token; // Token is stored in a cookie named 'token'  
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    try 
+    {
+      const decoded = jwt.verify(token, config.server.JWT_SECRET);
+      const email = decoded.email;
+      const {pid,increaseQuantity,unitPrice} = req.body;
+      const pool = req.pool;
+      const [custRows] = await pool.execute(
+        "SELECT customer_id FROM customer WHERE email = ?",
+        [email]
+      );
+      const [shoppingCartRows] = await pool.execute(
+        "SELECT cart_id FROM shopping_cart WHERE customer_id=?",
+        [custRows[0].customer_id],
+      );
+        if(increaseQuantity){
+          await pool.execute(
+            "UPDATE cart_items set quantity =quantity +1 where cart_id=? and product_id=?",
+            [shoppingCartRows[0].cart_id,pid],
+            
+          )
+          await pool.execute(
+            "UPDATE cart_items set total_price =total_price +? where cart_id=? and product_id=?",
+            [unitPrice,shoppingCartRows[0].cart_id,pid],
+            
+          )
+          res.status(200).json({ message: "Successfully Updated Quantity" });
+        }
+        else{
+          await pool.execute(
+            "UPDATE cart_items set quantity =quantity -1 where cart_id=? and product_id=?",
+            [shoppingCartRows[0].cart_id,pid],
+          )
+          await pool.execute(
+            "UPDATE cart_items set total_price =total_price -? where cart_id=? and product_id=?",
+            [unitPrice,shoppingCartRows[0].cart_id,pid],
+            
+          )
+          res.status(200).json({ message: "Successfully Updated Quantity" });
+        }
+   }
+   catch(error){
+    res.status(500).json({ message: "Internal server error" });
+   }
   },
 };
