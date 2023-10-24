@@ -10,6 +10,7 @@ create table employee (
     last_name varchar(30) not null,
     phone_number bigint unique not null,
     address varchar(50) not null,
+     password varchar(100) not null,
     email varchar(30) unique not null,
     company_id int,
     foreign key (company_id) references company(company_id)
