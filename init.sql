@@ -62,7 +62,7 @@ create table product (
     category varchar(50),
     name varchar(50),
     image_url varchar(200),
-    price float,
+    price float
     -- stock_id int,
     -- foreign key (stock_id) references inventory(stock_id)
 );
@@ -376,14 +376,15 @@ values
 'https://5.imimg.com/data5/NE/JP/MY-23387521/odonil-toilet-air-freshener.jpg',
 56);
 
+
 DELIMITER //
-CREATE FUNCTION InsertInventoryWithResult(IN in_category VARCHAR(30), IN in_name VARCHAR(50), IN in_product_id INT)
+CREATE FUNCTION InsertInventoryWithResult(in_category VARCHAR(30), in_name VARCHAR(50), in_product_id INT)
 RETURNS VARCHAR(50)
 DETERMINISTIC
 BEGIN
     DECLARE success_message VARCHAR(50);
     DECLARE fail_message VARCHAR(50);
-
+    DECLARE result VARCHAR(50);
     -- Attempt to insert the values
     INSERT INTO inventory (quantity, category, name, product_id)
     VALUES (50, in_category, in_name, in_product_id);
@@ -410,14 +411,14 @@ SELECT InsertInventoryWithResult('Snacks', 'Punjabi Tadka', 6);
 SELECT InsertInventoryWithResult('Snacks', 'Long Masala Banana Chips', 7);
 SELECT InsertInventoryWithResult('Snacks', 'Kurkure', 8);
 
-SELECT InsertInventoryWithResult(Cookies, 'Dark Fantasy Choco Fills', 9);
-SELECT InsertInventoryWithResult(Cookies, 'Oreo Biscuit', 10);
-SELECT InsertInventoryWithResult(Cookies, 'Marigold Biscuit', 11);
-SELECT InsertInventoryWithResult(Cookies, 'Cheese Crackers', 12);
-SELECT InsertInventoryWithResult(Cookies, 'Milk Bikis', 13);
-SELECT InsertInventoryWithResult(Cookies, 'Nutri Choice', 14);
-SELECT InsertInventoryWithResult(Cookies, 'Bourbon', 15);
-SELECT InsertInventoryWithResult(Cookies, 'Parle G', 16);
+SELECT InsertInventoryWithResult('Cookies', 'Dark Fantasy Choco Fills', 9);
+SELECT InsertInventoryWithResult('Cookies', 'Oreo Biscuit', 10);
+SELECT InsertInventoryWithResult('Cookies', 'Marigold Biscuit', 11);
+SELECT InsertInventoryWithResult('Cookies', 'Cheese Crackers', 12);
+SELECT InsertInventoryWithResult('Cookies', 'Milk Bikis', 13);
+SELECT InsertInventoryWithResult('Cookies', 'Nutri Choice', 14);
+SELECT InsertInventoryWithResult('Cookies', 'Bourbon', 15);
+SELECT InsertInventoryWithResult('Cookies', 'Parle G', 16);
 
 SELECT InsertInventoryWithResult('Sweets', 'Ferrero Rocher', 17);
 SELECT InsertInventoryWithResult('Sweets', 'Dairy Milk Silk', 18);
