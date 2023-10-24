@@ -56,14 +56,6 @@ create table payment (
     payment_amount float not null
 );
 
-create table inventory (
-    stock_id int primary key unique auto_increment,
-    quantity int,
-    category varchar(30),
-    remaining_quantity int,
-    name varchar(50)
-);
-
 create table product (
     product_id int primary key unique auto_increment,
     description varchar(500),
@@ -71,8 +63,17 @@ create table product (
     name varchar(50),
     image_url varchar(200),
     price float,
-    stock_id int,
-    foreign key (stock_id) references inventory(stock_id)
+    -- stock_id int,
+    -- foreign key (stock_id) references inventory(stock_id)
+);
+
+create table inventory (
+    stock_id int primary key unique auto_increment,
+    quantity int,
+    category varchar(30),
+    name varchar(50),
+    product_id int,
+    foreign key (product_id) references product(product_id)
 );
 
 create table shopping_cart (
@@ -374,3 +375,87 @@ values
 'Odonil air freshner',
 'https://5.imimg.com/data5/NE/JP/MY-23387521/odonil-toilet-air-freshener.jpg',
 56);
+
+DELIMITER //
+CREATE FUNCTION InsertInventoryWithResult(IN in_category VARCHAR(30), IN in_name VARCHAR(50), IN in_product_id INT)
+RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+    DECLARE success_message VARCHAR(50);
+    DECLARE fail_message VARCHAR(50);
+
+    -- Attempt to insert the values
+    INSERT INTO inventory (quantity, category, name, product_id)
+    VALUES (50, in_category, in_name, in_product_id);
+
+    -- Check if the insert was successful and set the result
+    IF ROW_COUNT() = 1 THEN
+        SET success_message = 'Success: Row inserted into inventory.';
+        SET result = success_message;
+    ELSE
+        SET fail_message = 'Error: Row not inserted into inventory.';
+        SET result = fail_message;
+    END IF;
+    
+    RETURN result;
+END //
+DELIMITER ;
+
+SELECT InsertInventoryWithResult('Snacks', 'Bhujia Sev', 1);
+SELECT InsertInventoryWithResult('Snacks', 'Lasaniya gathiya', 2);
+SELECT InsertInventoryWithResult('Snacks', 'Tomato Lays', 3);
+SELECT InsertInventoryWithResult('Snacks', 'Pringles', 4);
+SELECT InsertInventoryWithResult('Snacks', 'Doritos', 5);
+SELECT InsertInventoryWithResult('Snacks', 'Punjabi Tadka', 6);
+SELECT InsertInventoryWithResult('Snacks', 'Long Masala Banana Chips', 7);
+SELECT InsertInventoryWithResult('Snacks', 'Kurkure', 8);
+
+SELECT InsertInventoryWithResult(Cookies, 'Dark Fantasy Choco Fills', 9);
+SELECT InsertInventoryWithResult(Cookies, 'Oreo Biscuit', 10);
+SELECT InsertInventoryWithResult(Cookies, 'Marigold Biscuit', 11);
+SELECT InsertInventoryWithResult(Cookies, 'Cheese Crackers', 12);
+SELECT InsertInventoryWithResult(Cookies, 'Milk Bikis', 13);
+SELECT InsertInventoryWithResult(Cookies, 'Nutri Choice', 14);
+SELECT InsertInventoryWithResult(Cookies, 'Bourbon', 15);
+SELECT InsertInventoryWithResult(Cookies, 'Parle G', 16);
+
+SELECT InsertInventoryWithResult('Sweets', 'Ferrero Rocher', 17);
+SELECT InsertInventoryWithResult('Sweets', 'Dairy Milk Silk', 18);
+SELECT InsertInventoryWithResult('Sweets', 'Kitkat', 19);
+SELECT InsertInventoryWithResult('Sweets', 'Munch', 20);
+SELECT InsertInventoryWithResult('Sweets', 'Haldiram Rasgulla', 21);
+SELECT InsertInventoryWithResult('Sweets', 'Haldiram Gulab Jamun', 22);
+SELECT InsertInventoryWithResult('Sweets', 'Haldiram Besan Laddu', 23);
+SELECT InsertInventoryWithResult('Sweets', 'Milk Cake', 24);
+
+SELECT InsertInventoryWithResult('Fruits', 'Banana', 25);
+SELECT InsertInventoryWithResult('Fruits', 'Grapes', 26);
+SELECT InsertInventoryWithResult('Fruits', 'Apples', 27);
+SELECT InsertInventoryWithResult('Fruits', 'Oranges', 28);
+SELECT InsertInventoryWithResult('Fruits', 'Pineapple', 29);
+SELECT InsertInventoryWithResult('Fruits', 'Guava', 30);
+SELECT InsertInventoryWithResult('Fruits', 'Mangoes', 31);
+SELECT InsertInventoryWithResult('Fruits', 'Strawberries', 32);
+
+SELECT InsertInventoryWithResult('Vegetables', 'Tomato', 33);
+SELECT InsertInventoryWithResult('Vegetables', 'Potato', 34);
+SELECT InsertInventoryWithResult('Vegetables', 'LadyFinger', 35);
+SELECT InsertInventoryWithResult('Vegetables', 'Brinjal', 36);
+SELECT InsertInventoryWithResult('Vegetables', 'Onion', 37);
+SELECT InsertInventoryWithResult('Vegetables', 'Spinach', 38);
+SELECT InsertInventoryWithResult('Vegetables', 'Beans', 39);
+SELECT InsertInventoryWithResult('Vegetables', 'Cauliflower', 40);
+
+SELECT InsertInventoryWithResult('Cleaners', 'Vim liquid gel', 41);
+SELECT InsertInventoryWithResult('Cleaners', 'Lizol liquid', 42);
+SELECT InsertInventoryWithResult('Cleaners', 'SurfExcel detergent', 43);
+SELECT InsertInventoryWithResult('Cleaners', 'Harpic liquid', 44);
+SELECT InsertInventoryWithResult('Cleaners', 'Savlon liquid', 45);
+SELECT InsertInventoryWithResult('Cleaners', 'Dettol liquid', 46);
+SELECT InsertInventoryWithResult('Cleaners','Tide washing powder', 47);
+SELECT InsertInventoryWithResult('Cleaners', 'Napthalene balls', 48);
+
+SELECT InsertInventoryWithResult('Fresheners', 'Ambipur Spray', 49);
+SELECT InsertInventoryWithResult('Fresheners', 'Godrej air Spray', 50);
+SELECT InsertInventoryWithResult('Fresheners', 'Goodnight refill', 51);
+SELECT InsertInventoryWithResult('Fresheners', 'Odonil air freshner', 52);
