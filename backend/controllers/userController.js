@@ -99,13 +99,16 @@ module.exports = {
   },
   getToken: async (req, res) => {
     const token = req.cookies.token;
-    const decoded = jwt.verify(token, config.server.JWT_SECRET);
-    if (token && (decoded.email === 'groot@admin.com' || decoded.email ==='beetroot@admin.com' )) {
-      return res.status(200).json({ message: "Admin token exists" });
+    const adminToken = req.cookies.admintoken;
+    if (adminToken) {
+      const decoded = jwt.verify(adminToken, config.server.JWT_SECRET);
+      if (decoded.email === 'groot@admin.com' || decoded.email ==='beetroot@admin.com') {
+        return res.status(200).json({ message: "Admin token exists" });
+      }
     }
     else if(token){
+      const decoded = jwt.verify(token, config.server.JWT_SECRET);
       return res.status(200).json({ message: "Token exists" });
-
     }
   },
 };

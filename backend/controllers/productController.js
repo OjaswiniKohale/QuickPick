@@ -19,6 +19,7 @@ module.exports = {
       if (adminToken) {
         const decoded = jwt.verify(adminToken, config.server.JWT_SECRET);
         const email = decoded.email;
+        console.log(email);
         if(email==='groot@admin.com' || email === 'beetroot@admin.com'){
         
           const [rows] = await pool.execute(

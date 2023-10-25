@@ -1,52 +1,73 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Stars.css";
 import axios from "axios";
+import { convertLength } from "@mui/material/styles/cssUtils";
 
 const Cart = (props) => {
-  const { name, price, img, inventoryQuantity } = props;
+  const { product_id, name, price, img, inventoryQuantity, localInventoryQuantity, setLocalInventoryQuantity } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
   const [total, setTotal] = useState(price.toFixed(2));
 
-  console.log(inventoryQuantity);
-
   // Update total when quantity changes
   useEffect(() => {
     setTotal((price * quantity).toFixed(2));
-  }, [quantity]);
+  }, [quantity, localInventoryQuantity]);
 
   const cartAddition = async (name, totalPrice, img) => {
-    const data = {
-      name: name,
-      totalPrice: totalPrice,
-      img: img,
-      quantity: quantity,
-    };
-    try {
-      console.log("I am being called");
-      const response = await axios.post("/api/v1/addToCart", data);
-      console.log(response.data.message);
-
-      if (response.data.message === "Added to cart") {
-        console.log("Yay");
+    if (inventoryQuantity !== null) {
+      const data = {
+        product_id: product_id,
+        quantity: localInventoryQuantity,
+      };
+      try {
+        const response = await axios.post("/api/v1/updateInventory", data);
+        console.log(response.data.message);
+  
+        if (response.data.message === "Updated quantity") {
+          console.log("Yay");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else if (inventoryQuantity === null) {
+      const data = {
+        name: name,
+        totalPrice: totalPrice,
+        img: img,
+        quantity: quantity,
+      };
+      try {
+        const response = await axios.post("/api/v1/addToCart", data);
+        console.log(response.data.message);
+  
+        if (response.data.message === "Added to cart") {
+          console.log("Yay");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
   const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const decreaseQuantity = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
+    if(inventoryQuantity!==null)
+    {
+      setLocalInventoryQuantity(localInventoryQuantity+1);
+    } else {
+      setQuantity(quantity + 1);
     }
   };
 
-  const removeFromCart = () => {
-    setQuantity(0);
+  const decreaseQuantity = () => {
+    if (quantity > 1 || inventoryQuantity >= 0) {
+      if(inventoryQuantity!==null)
+      {
+        setLocalInventoryQuantity(localInventoryQuantity+1);
+      } else {
+        setQuantity(quantity + 1);
+      }
+    }
   };
 
   const handleRatingChange = (event) => {

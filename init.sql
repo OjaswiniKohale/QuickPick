@@ -503,6 +503,7 @@ INSERT INTO employee values(111,'groot','groot','groot',1212121212,'45, Parklane
 INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48, Amar Heights Nashik','$2b$10$4xfsqHIFFgJ9TaGad/JWL.XDZXKExbDKLQ8c8odwUatdW7vspvYGi','beetgroot@admin.com',1);
 
 INSERT INTO management values(111);
+<<<<<<< Updated upstream
 INSERT INTO technical values(112);
 
 --TRIGGER
@@ -538,3 +539,6 @@ INSERT into vendor(supplier_id) values (1),(2),(3),(4);
 
 INSERT INTO distributor(supplier_id) values (1),(2),(3),(4);
 
+=======
+INSERT INTO technical values(112);
+>>>>>>> Stashed changes

@@ -6,10 +6,11 @@ import { useLocation } from "react-router-dom";
 const Product = ({ currentCart, makeCart }) => {
   const { state } = useLocation();
   const [products, setProducts] = useState([]);
+  const [localInventoryQuantity, setLocalInventoryQuantity] = useState();
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [localInventoryQuantity]);
 
   const fetchProducts = async () => {
     try {
@@ -50,12 +51,15 @@ const Product = ({ currentCart, makeCart }) => {
           <div className="col-md-3" key={product.product_id}>
 
               <Cart
+              product_id={product.product_id}
               price={product.price}
               name={product.name}
               img={product.image_url}
               makeCart={makeCart}
               currentCart={currentCart}
               inventoryQuantity={product.quantity || null}
+              localInventoryQuantity={localInventoryQuantity}
+              setLocalInventoryQuantity={setLocalInventoryQuantity}
             />
           </div>
         ))}
