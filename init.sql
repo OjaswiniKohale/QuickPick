@@ -504,3 +504,37 @@ INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48,
 
 INSERT INTO management values(111);
 INSERT INTO technical values(112);
+
+--TRIGGER
+
+DELIMITER $$
+
+CREATE TRIGGER update_inventory_after_cart_increase
+AFTER UPDATE ON cart_items
+FOR EACH ROW
+BEGIN
+    DECLARE quantity_diff INT;
+
+    -- Calculate the difference in quantity
+    SET quantity_diff = NEW.quantity - OLD.quantity;
+
+    -- Update the inventory
+    UPDATE inventory
+    SET quantity = quantity - quantity_diff
+    WHERE product_id = NEW.product_id;
+END $$
+
+DELIMITER ;
+
+
+INSERT INTO supplier (address,phone_number,first_name,last_name,company_id) 
+values 
+("402 Parklane sus gaon Pune",6543218282,"Shreya","Nair",1),
+("709 Above Sai Hotel Sangam Vihar Delhi",987654321,"Rakshit","agarwal",1),
+("12/13 Khopoli Road Pune",1234567212,"Manoj","Kumar",1),
+("123 Churchgate mumbai",1234597311,"John","Doe",1);
+
+INSERT into vendor(supplier_id) values (1),(2),(3),(4);
+
+INSERT INTO distributor(supplier_id) values (1),(2),(3),(4);
+
