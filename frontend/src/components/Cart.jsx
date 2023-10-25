@@ -3,10 +3,12 @@ import "../styles/Stars.css";
 import axios from "axios";
 
 const Cart = (props) => {
-  const { name, price, img, makeCart, currentCart } = props;
+  const { name, price, img, inventoryQuantity } = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
   const [total, setTotal] = useState(price.toFixed(2));
+
+  console.log(inventoryQuantity);
 
   // Update total when quantity changes
   useEffect(() => {
@@ -77,7 +79,8 @@ const Cart = (props) => {
               >
                 -
               </button>
-              <span className="input-group-text">{quantity}</span>
+              <span className="input-group-text">{inventoryQuantity !== null ? inventoryQuantity : quantity}</span>
+
               <button
                 className="btn btn-outline-success btn-sm"
                 onClick={increaseQuantity}
@@ -87,12 +90,15 @@ const Cart = (props) => {
             </div>
           </div>
         </li>
-        <li className="list-group-item">
-          <div className="d-flex justify-content-between align-items-center">
-            <span>Total:</span>
-            <strong>Rs.{total}</strong>
-          </div>
-        </li>
+        {!inventoryQuantity && (
+  <li className="list-group-item">
+    <div className="d-flex justify-content-between align-items-center">
+      <span>Total:</span>
+      <strong>Rs.{total}</strong>
+    </div>
+  </li>
+)}
+
       </ul>
       <div className="card-footer d-flex justify-content-center align-items-center">
         <button
@@ -100,7 +106,7 @@ const Cart = (props) => {
           style={{ margin: "0 auto" }}
           onClick={() => cartAddition(name, total, img)}
         >
-          Add to Cart
+          {inventoryQuantity ? "Update Quantity" : "Add to Cart"}
         </button>
       </div>
 

@@ -9,13 +9,24 @@ const Product = ({ currentCart, makeCart }) => {
 
   useEffect(() => {
     fetchProducts();
-  });
+  }, []);
 
   const fetchProducts = async () => {
     try {
       const response = await axios.get("/api/v1/getToken");
 
       if (response.data.message === "Token exists") {
+        const productObject = await axios.get("/api/v1/products", {
+          params: {
+            category: state.category,
+          },
+        });
+
+        if (productObject.data.products) {
+          setProducts(productObject.data.products);
+        }
+      }
+      else if (response.data.message === "Admin token exists"){
         const productObject = await axios.get("/api/v1/products", {
           params: {
             category: state.category,
@@ -37,12 +48,14 @@ const Product = ({ currentCart, makeCart }) => {
       <div className="row">
         {products.map((product) => (
           <div className="col-md-3" key={product.product_id}>
-            <Cart
+
+              <Cart
               price={product.price}
               name={product.name}
               img={product.image_url}
               makeCart={makeCart}
               currentCart={currentCart}
+              inventoryQuantity={product.quantity || null}
             />
           </div>
         ))}
