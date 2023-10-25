@@ -460,3 +460,47 @@ SELECT InsertInventoryWithResult('Fresheners', 'Ambipur Spray', 49);
 SELECT InsertInventoryWithResult('Fresheners', 'Godrej air Spray', 50);
 SELECT InsertInventoryWithResult('Fresheners', 'Goodnight refill', 51);
 SELECT InsertInventoryWithResult('Fresheners', 'Odonil air freshner', 52);
+
+DELIMITER //
+CREATE PROCEDURE ValidateCustomeEmailPhone(
+    IN customer_id INT,
+    IN customer_email VARCHAR(30),
+    IN customer_phone_number BIGINT
+)
+BEGIN
+    DECLARE email_valid BOOLEAN;
+    DECLARE phone_valid BOOLEAN;
+
+    -- Validate email format
+    SET email_valid = (SELECT 
+        CASE
+            WHEN customer_email REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$' THEN TRUE
+            ELSE FALSE
+        END
+    );
+
+    -- Validate phone number format (assuming 10-digit format)
+    SET phone_valid = (SELECT 
+        CASE
+            WHEN LENGTH(CAST(customer_phone_number AS CHAR)) = 10 AND customer_phone_number > 0 THEN TRUE
+            ELSE FALSE
+        END
+    );
+
+    IF email_valid AND phone_valid THEN
+        SELECT 'valid.';
+    ELSE
+        SELECT 'Invalid';
+    END IF;
+END;
+//
+DELIMITER ;
+
+INSERT INTO company values(1,'QuickPick');
+
+INSERT INTO employee values(111,'groot','groot','groot',1212121212,'45, Parklane Joy Pune','$2b$10$3fbVVKtB4YI4NTD3WbKcVeo5av6DbHd3ovrS7U3OIwJ0VVZJvbaeS','groot@admin.com',1);
+
+INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48, Amar Heights Nashik','$2b$10$4xfsqHIFFgJ9TaGad/JWL.XDZXKExbDKLQ8c8odwUatdW7vspvYGi','beetgroot@admin.com',1);
+
+INSERT INTO management values(111);
+INSERT INTO technical values(112);
