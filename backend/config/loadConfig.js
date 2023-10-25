@@ -3,7 +3,7 @@ const yaml = require('yaml');
 
 function loadConfig() {
   try {
-    const configPath = "";
+    const configPath = 'C:/Users/ASUS/OneDrive/Desktop/DBMS Project/QuickPick/backend/config/config.yaml';
     const config = yaml.parse(fs.readFileSync(configPath, 'utf8'));
     return config;
   } catch (e) {

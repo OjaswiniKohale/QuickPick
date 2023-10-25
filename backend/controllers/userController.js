@@ -49,28 +49,48 @@ module.exports = {
     const { email, password } = req.body;
 
     const pool = req.pool;
-
     try {
-      const [rows, fields] = await pool.execute(
-        "SELECT password FROM customer WHERE email = ?",
-        [email],
-      );
-
-      if (rows.length === 0) {
-        res.status(400).json({ message: "This email has not registered" });
-      } else {
+      if(email==='groot@admin.com' || email === 'beetroot@admin.com'){
+        const [rows] = await pool.execute(
+          "SELECT password FROM employee WHERE email = ?",
+          [email],
+        );
         const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
-
-        if (match) {
-          const payload = { email: email };
-          const token = jwt.sign(payload, config.server.JWT_SECRET, {
-            expiresIn: "1h",
-          });
-          res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
-
-          res.status(200).json({ message: "success" });
+          if(match){
+            const payload = { email: email };
+            const token = jwt.sign(payload, config.server.JWT_SECRET, {
+              expiresIn: "1h",
+            });
+            res.cookie("admintoken", token, { maxAge: 3600000, httpOnly: true });
+    
+            res.status(200).json({ message: "adminsuccess" }); 
+          }
+          else{
+            res.status(400).json({ message: "Incorrect password entered" });
+          }
+      }
+      else{
+        const [rows, fields] = await pool.execute(
+          "SELECT password FROM customer WHERE email = ?",
+          [email],
+        );
+  
+        if (rows.length === 0) {
+          res.status(400).json({ message: "This email has not registered" });
         } else {
-          res.status(400).json({ message: "Incorrect password entered" });
+          const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
+  
+          if (match) {
+            const payload = { email: email };
+            const token = jwt.sign(payload, config.server.JWT_SECRET, {
+              expiresIn: "1h",
+            });
+            res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
+  
+            res.status(200).json({ message: "success" });
+          } else {
+            res.status(400).json({ message: "Incorrect password entered" });
+          }
         }
       }
     } catch (error) {
@@ -79,9 +99,13 @@ module.exports = {
   },
   getToken: async (req, res) => {
     const token = req.cookies.token;
-
-    if (token) {
+    const decoded = jwt.verify(token, config.server.JWT_SECRET);
+    if (token && (decoded.email === 'groot@admin.com' || decoded.email ==='beetroot@admin.com' )) {
+      return res.status(200).json({ message: "Admin token exists" });
+    }
+    else if(token){
       return res.status(200).json({ message: "Token exists" });
+
     }
   },
 };

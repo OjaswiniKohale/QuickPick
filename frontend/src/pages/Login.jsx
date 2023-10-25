@@ -46,8 +46,8 @@ export default function Login() {
 
       if (response.data.message === "success") {
         navigate("/");
-      } else {
-        // Todo
+      } else if (response.data.message === "adminsuccess") {
+        navigate("/");
       }
     } catch (error) {
       console.log("Error", error);
