@@ -31,12 +31,12 @@ function Copyright() {
 
 const steps = ["Shipping address", "Payment details", "Review your order"];
 
-function getStepContent(step,setAddress,setCity,setPincode,setState) {
+function getStepContent(step,setAddress,setCity,setPincode,setState, setCardName, setCardNumber, setCvv) {
   switch (step) {
     case 0:
       return <AddressForm setAddress={setAddress} setCity={setCity} setPincode={setPincode} setState={setState}/>;
     case 1:
-      return <PaymentForm />;
+      return <PaymentForm setCardName={setCardName} setCardNumber={setCardNumber} setCvv={setCvv} />;
     case 2:
       return <Review />;
     default:
@@ -50,6 +50,9 @@ export default function Checkout() {
   const [city,setCity] = useState("")
   const [state,setState] = useState("")
   const [activeStep, setActiveStep] = React.useState(0);
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState(0);
+  const [cvv, setCvv] = useState(0);
 
   const handleFirstNext = async() => {
     const fullAddress = `${address}, ${city}, ${state} - ${pincode}`;
@@ -61,6 +64,19 @@ export default function Checkout() {
       setActiveStep(activeStep + 1);
     }
   };
+
+  const handleSecondNext = async () => {
+    const data = {
+      card_number: cardNumber,
+      card_name: cardName,
+      cvv: cvv,
+    };
+
+    const response = await axios.post("/api/v1/savePayment", data);
+    if (response.data.message === "Set payment details"){
+      setActiveStep(activeStep + 1);
+    }
+  }
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
@@ -106,7 +122,7 @@ export default function Checkout() {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              {getStepContent(activeStep,setAddress,setCity,setPincode,setState)}
+              {getStepContent(activeStep,setAddress,setCity,setPincode,setState, setCardName, setCardNumber, setCvv)}
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
@@ -116,7 +132,7 @@ export default function Checkout() {
 
                 <Button
                   variant="contained"
-                  onClick={activeStep === 0 ? handleFirstNext: () => {}}
+                  onClick={activeStep === 0 ? handleFirstNext: activeStep === 1 ? handleSecondNext : () => {}}
                   sx={{ mt: 3, ml: 1 }}
                 >
                   

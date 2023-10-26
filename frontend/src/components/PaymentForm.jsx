@@ -5,7 +5,16 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function PaymentForm() {
+export default function PaymentForm({setCardName, setCardNumber, setCvv}) {
+  function handleCardName(event) {
+    setCardName(event.target.value);
+  }
+  function handleCardNumber(event) {
+    setCardNumber(event.target.value);
+  }
+  function handleCvv(event) {
+    setCvv(event.target.value);
+  }
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -20,6 +29,7 @@ export default function PaymentForm() {
             fullWidth
             autoComplete="cc-name"
             variant="standard"
+            onChange={handleCardName}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -30,16 +40,7 @@ export default function PaymentForm() {
             fullWidth
             autoComplete="cc-number"
             variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            required
-            id="expDate"
-            label="Expiry date"
-            fullWidth
-            autoComplete="cc-exp"
-            variant="standard"
+            onChange={handleCardNumber}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -51,6 +52,7 @@ export default function PaymentForm() {
             fullWidth
             autoComplete="cc-csc"
             variant="standard"
+            onChange={handleCvv}
           />
         </Grid>
         <Grid item xs={12}>
