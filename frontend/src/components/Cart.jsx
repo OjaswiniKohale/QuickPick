@@ -12,7 +12,7 @@ const Cart = (props) => {
   // Update total when quantity changes
   useEffect(() => {
     setTotal((price * quantity).toFixed(2));
-  }, [quantity]);
+  }, [quantity, localInventoryQuantity]);
 
   const cartAddition = async (name, totalPrice, img) => {
     if (inventoryQuantity !== null) {
@@ -64,7 +64,7 @@ const Cart = (props) => {
     if (quantity > 1 || inventoryQuantity >= 0) {
       if(inventoryQuantity!==null)
       {
-       setLocalInventoryQuantity(localInventoryQuantity+1);
+       setLocalInventoryQuantity(localInventoryQuantity-1);
       } else {
         setQuantity(quantity + 1);
       }
@@ -103,7 +103,7 @@ const Cart = (props) => {
               >
                 -
               </button>
-              <span className="input-group-text">{inventoryQuantity !== null ? inventoryQuantity : quantity}</span>
+              <span className="input-group-text">{inventoryQuantity !== null ? localInventoryQuantity : quantity}</span>
 
               <button
                 className="btn btn-outline-success btn-sm"
