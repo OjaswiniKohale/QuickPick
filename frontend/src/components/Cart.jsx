@@ -4,15 +4,15 @@ import axios from "axios";
 import { convertLength } from "@mui/material/styles/cssUtils";
 
 const Cart = (props) => {
-  const { product_id, name, price, img, inventoryQuantity, localInventoryQuantity, setLocalInventoryQuantity } = props;
+  const { product_id, name, price, img, inventoryQuantity} = props;
   const [quantity, setQuantity] = useState(1);
   const [rating, setRating] = useState(0); // Initialize rating state
   const [total, setTotal] = useState(price.toFixed(2));
-
+  const [localInventoryQuantity, setLocalInventoryQuantity] = useState(inventoryQuantity);
   // Update total when quantity changes
   useEffect(() => {
     setTotal((price * quantity).toFixed(2));
-  }, [quantity, localInventoryQuantity]);
+  }, [quantity]);
 
   const cartAddition = async (name, totalPrice, img) => {
     if (inventoryQuantity !== null) {
@@ -57,17 +57,20 @@ const Cart = (props) => {
     } else {
       setQuantity(quantity + 1);
     }
+    
   };
 
   const decreaseQuantity = () => {
     if (quantity > 1 || inventoryQuantity >= 0) {
       if(inventoryQuantity!==null)
       {
-        setLocalInventoryQuantity(localInventoryQuantity+1);
+       setLocalInventoryQuantity(localInventoryQuantity+1);
       } else {
         setQuantity(quantity + 1);
       }
+     
     }
+    
   };
 
   const handleRatingChange = (event) => {
