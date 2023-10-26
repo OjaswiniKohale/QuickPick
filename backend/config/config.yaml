@@ -6,7 +6,7 @@ database:
       PORT: 3306
       NAME: quickpickdb
       USERNAME: root
-      PASSWORD: ''
+      PASSWORD: 'parshva@2003'
       ADMIN_ONE: 'groot@admin.com'
       ADMIN_ONE_PASSWORD: '$2b$10$3fbVVKtB4YI4NTD3WbKcVeo5av6DbHd3ovrS7U3OIwJ0VVZJvbaeS'
       ADMIN_TWO: 'beetroot@admin.com'

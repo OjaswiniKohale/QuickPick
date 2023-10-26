@@ -55,6 +55,9 @@ export default function Checkout() {
   const [cvv, setCvv] = useState(0);
 
   const handleFirstNext = async() => {
+    if(address === '' || city === '' || pincode === ''){
+        return;
+    }
     const fullAddress = `${address}, ${city}, ${state} - ${pincode}`;
     console.log(fullAddress)
     const response = await axios.post("/api/v1/checkoutcart", {

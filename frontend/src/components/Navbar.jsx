@@ -11,6 +11,7 @@ import QuickPickLogo from "../assets/quickPicklogo .png";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
+import axios from "axios"
 
 const StyledToolBar = styled(Toolbar)({
   display: "flex",
@@ -28,6 +29,9 @@ const Search = styled("div")(({ theme }) => ({
 const Icons = styled("Box")(({ theme }) => ({}));
 
 const Navbar = () => {
+  const handleClearCookies = async () => {
+    const response = await axios.get("/api/v1/clearCookies");
+  }
   return (
     <AppBar position="sticky" sx={{ backgroundColor: "white" }}>
       <StyledToolBar>
@@ -68,6 +72,9 @@ const Navbar = () => {
             </Badge>
           </Link>
         </Icons>
+        <button style={{color: "#F57F17"}} className="btn rounded-pill" onClick={handleClearCookies}>
+          Logout
+        </button>
       </StyledToolBar>
     </AppBar>
   );

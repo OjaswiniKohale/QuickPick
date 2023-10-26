@@ -44,7 +44,6 @@ create table delivery (
     delivery_id int primary key unique auto_increment,
     delivery_date datetime not null,
     delivery_cost float,
-    delivery_status varchar(15),
     customer_id int,
     foreign key (customer_id) references customer(customer_id)
 );
@@ -98,7 +97,6 @@ create table cart_items(
 create table reviews (
     review_id int primary key unique auto_increment,
     rating int,
-    description varchar(250),
     review_date date,
     customer_id int,
     foreign key (customer_id) references customer(customer_id)

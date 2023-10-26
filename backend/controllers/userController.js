@@ -4,6 +4,7 @@ const loadConfig = require("../config/loadConfig");
 const config = loadConfig();
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const { response } = require("express");
 
 module.exports = {
   signup: async (req, res) => {
@@ -111,4 +112,21 @@ module.exports = {
       return res.status(200).json({ message: "Token exists" });
     }
   },
+
+  clearCookies: async(req,res) =>{
+    const token = req.cookies.token;
+    const adminToken = req.cookies.admintoken;
+    if(token){
+      res.clearCookie("token")
+      console.log("i am being called")
+      return res.status(200).json({message:"Cleared User Cookie"})
+    }
+    if(adminToken){
+      res.clearCookie("adminToken");
+      return res.status(200).json({message:"Cleared Admin Cookie"})
+    }
+  },
 };
+
+
+

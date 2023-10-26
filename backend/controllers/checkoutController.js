@@ -60,9 +60,13 @@ module.exports ={
                 const currentDate = new Date();
                 const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
                 // Gotta add payment_amount here
+                const [totalPriceRows] = await pool.execute(
+                    "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
+                    [custRows[0].customer_id],
+                )
                 await pool.execute(
-                    "INSERT INTO payment(card_name, card_number, cvv, customer_id, payment_date) VALUES (?, ?, ?, ?, ?)",
-                    [card_name, card_number, cvv, custRows[0].customer_id, formattedDate],
+                    "INSERT INTO payment(card_name, card_number, cvv, customer_id, payment_date,payment_amount) VALUES (?, ?, ?, ?, ?, ?)",
+                    [card_name, card_number, cvv, custRows[0].customer_id, formattedDate,totalPriceRows[0].total],
                 );
                 res.status(200).json({message:"Set payment details"})
             } else {
@@ -78,11 +82,50 @@ module.exports ={
                     "UPDATE payment SET cvv = ? WHERE payment_id = ?",
                     [cvv, payRows[0].payment_id],
                 );
+                const [totalPriceRows] = await pool.execute(
+                    "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
+                    [custRows[0].customer_id],
+                )
+                await pool.execute(
+                    "UPDATE payment SET payment_amount = ? WHERE payment_id = ?",
+                    [totalPriceRows[0].total, payRows[0].payment_id],
+                );
+
                 res.status(200).json({message:"Set payment details"})
             }
         } catch (error) {
             console.log(error)
             res.status(500).json({message:"Internal server error!!"})
         }
-    }      
+    },
+    reviewOrder: async (req,res) => {
+        const token = req.cookies.token; // Token is stored in a cookie named 'token'
+    
+        if (!token) {
+          return res.status(401).json({ message: "Unauthorized" });
+        }
+        try {
+            const decoded = jwt.verify(token, config.server.JWT_SECRET);
+            const email = decoded.email;
+            const pool = req.pool;
+
+            const [custRows] = await pool.execute(
+                "SELECT customer_id FROM customer WHERE email = ?",
+                [email],
+              );
+            const [productDetailRows] = await pool.execute(
+                "select p.name, c.quantity, c.total_price from product p inner join cart_items c on p.product_id=c.product_id inner join shopping_cart s on s.cart_id = c.cart_id where s.customer_id=?",
+                [custRows[0].customer_id]
+            )
+            console.log(productDetailRows)
+            res.status(200).json(productDetailRows)
+        }
+        catch(error){
+            return res.status(500).json({message:"Internal server error"});
+        }
+    }
 }
+
+
+
+
