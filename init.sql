@@ -53,7 +53,12 @@ create table payment (
     payment_id int primary key unique auto_increment,
     method varchar(20),
     payment_date datetime not null,
-    payment_amount float not null
+    payment_amount float not null,
+    card_name varchar(30),
+    card_number bigint,
+    cvv int,
+    customer_id int,
+    foreign key (customer_id) references customer(customer_id)
 );
 
 create table product (
@@ -150,7 +155,7 @@ values(
 ) ,
 (
 'Snacks', '20 Rs for 200gm', 'Kurkure',
-'https://m.media-amazon.com/images/I/71LyKlizpuL._AC_UF1000,1000_QL80_.jpg', 20
+'https://m.media-amazon.com/images/I/71LyKlizpuL.AC_UF1000,1000_QL80.jpg', 20
 );
 
 insert into product(
@@ -162,7 +167,7 @@ values(
 ),
 (
 'Cookies', '30 Rs for 200gm', 'Oreo Biscuit',
-'https://m.media-amazon.com/images/I/61Xj1A6WCTL._SL1500_.jpg', 30
+'https://m.media-amazon.com/images/I/61Xj1A6WCTL.SL1500.jpg', 30
 ),
 (
 'Cookies', '20 Rs for 200gm', 'Marigold Biscuit',
@@ -460,3 +465,80 @@ SELECT InsertInventoryWithResult('Fresheners', 'Ambipur Spray', 49);
 SELECT InsertInventoryWithResult('Fresheners', 'Godrej air Spray', 50);
 SELECT InsertInventoryWithResult('Fresheners', 'Goodnight refill', 51);
 SELECT InsertInventoryWithResult('Fresheners', 'Odonil air freshner', 52);
+
+DELIMITER //
+CREATE PROCEDURE ValidateCustomeEmailPhone(
+    IN customer_id INT,
+    IN customer_email VARCHAR(30),
+    IN customer_phone_number BIGINT
+)
+BEGIN
+    DECLARE email_valid BOOLEAN;
+    DECLARE phone_valid BOOLEAN;
+
+    -- Validate email format
+    SET email_valid = (SELECT 
+        CASE
+            WHEN customer_email REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$' THEN TRUE
+            ELSE FALSE
+        END
+    );
+
+    -- Validate phone number format (assuming 10-digit format)
+    SET phone_valid = (SELECT 
+        CASE
+            WHEN LENGTH(CAST(customer_phone_number AS CHAR)) = 10 AND customer_phone_number > 0 THEN TRUE
+            ELSE FALSE
+        END
+    );
+
+    IF email_valid AND phone_valid THEN
+        SELECT 'valid.';
+    ELSE
+        SELECT 'Invalid';
+    END IF;
+END;
+//
+DELIMITER ;
+
+INSERT INTO company values(1,'QuickPick');
+
+INSERT INTO employee values(111,'groot','groot','groot',1212121212,'45, Parklane Joy Pune','$2b$10$3fbVVKtB4YI4NTD3WbKcVeo5av6DbHd3ovrS7U3OIwJ0VVZJvbaeS','groot@admin.com',1);
+
+INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48, Amar Heights Nashik','$2b$10$4xfsqHIFFgJ9TaGad/JWL.XDZXKExbDKLQ8c8odwUatdW7vspvYGi','beetgroot@admin.com',1);
+
+INSERT INTO management values(111);
+INSERT INTO technical values(112);
+
+-- TRIGGER
+
+-- DELIMITER $$
+
+-- CREATE TRIGGER update_inventory_after_cart_increase
+-- AFTER UPDATE ON cart_items
+-- FOR EACH ROW
+-- BEGIN
+--     DECLARE quantity_diff INT;
+
+--     -- Calculate the difference in quantity
+--     SET quantity_diff = NEW.quantity - OLD.quantity;
+
+--     -- Update the inventory
+--     UPDATE inventory
+--     SET quantity = quantity - quantity_diff
+--     WHERE product_id = NEW.product_id;
+-- END $$
+
+-- DELIMITER ;
+
+
+INSERT INTO supplier (address,phone_number,first_name,last_name,company_id) 
+values 
+("402 Parklane sus gaon Pune",6543218282,"Shreya","Nair",1),
+("709 Above Sai Hotel Sangam Vihar Delhi",987654321,"Rakshit","agarwal",1),
+("12/13 Khopoli Road Pune",1234567212,"Manoj","Kumar",1),
+("123 Churchgate mumbai",1234597311,"John","Doe",1);
+
+INSERT into vendor(supplier_id) values (1),(2),(3),(4);
+
+INSERT INTO distributor(supplier_id) values (1),(2),(3),(4);
