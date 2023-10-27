@@ -18,17 +18,24 @@ const payments = [
 export default function Review() {
   
   const [productDetails,setProductDetails] = useState([])
+  const [deliveryCost,setDeliveryCost] = useState(0)
   useEffect(()=>{
     fetchProductDetails()
+    handleDeliveryCost()
   },[])
-const fetchProductDetails = async() => {
+  const handleDeliveryCost = async() => {
+    const response = await axios.get("/api/v1/deliveryCost");
+    if(response.data.deliveryCost){
+      setDeliveryCost(response.data.deliveryCost)
+    }
+  }
+  const fetchProductDetails = async() => {
   const response = await axios.get("/api/v1/reviewOrder");
   console.log(response.data)
   if(response.data){
     setProductDetails(response.data)
   }
 }
-
 
   return (
     <React.Fragment>
@@ -43,9 +50,15 @@ const fetchProductDetails = async() => {
           </ListItem>
         ))}
         <ListItem sx={{ py: 1, px: 0 }}>
+          <ListItemText primary="Delivery Cost" />
+          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+          + Rs.{deliveryCost/21}
+          </Typography>
+        </ListItem>
+        <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-          Rs.{productDetails.reduce((acc, product) => acc + product.total_price, 0)}
+          Rs.{deliveryCost}
           </Typography>
         </ListItem>
       </List>

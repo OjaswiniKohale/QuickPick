@@ -118,9 +118,8 @@ export default function Checkout() {
                 Thank you for your order.
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                Your order has been confirmed!!!
+                Thank you!
               </Typography>
             </React.Fragment>
           ) : (
@@ -135,7 +134,7 @@ export default function Checkout() {
 
                 <Button
                   variant="contained"
-                  onClick={activeStep === 0 ? handleFirstNext: activeStep === 1 ? handleSecondNext : () => {}}
+                  onClick={activeStep === 0 ? handleFirstNext: activeStep === 1 ? handleSecondNext : () => {setActiveStep(activeStep+1)}}
                   sx={{ mt: 3, ml: 1 }}
                 >
                   

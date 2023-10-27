@@ -36,7 +36,7 @@ module.exports = {
         const decoded = jwt.verify(token, config.server.JWT_SECRET);
         
         const [rows] = await pool.execute(
-          "SELECT name, image_url, price FROM product WHERE category = ?",
+          "SELECT product_id, name, image_url, price FROM product WHERE category = ?",
           [category],
         );
         if (rows.length > 0) {
@@ -50,4 +50,56 @@ module.exports = {
       res.status(500).json({ message: "Internal server error" });
     }
   },
+
+  storeRating: async(req,res) => {
+    const token = req.cookies.token; // Token is stored in a cookie named 'token'
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+      // Verify the token
+      const pool = req.pool;
+      const {rating,product_id} = req.body;
+
+      const decoded = jwt.verify(token, config.server.JWT_SECRET);
+      const email = decoded.email;
+      const [custRows] = await pool.execute(
+        "SELECT customer_id FROM customer WHERE email = ?",
+        [email]
+      );
+        console.log(rating)
+      const [prevRating] = await pool.execute(
+        "SELECT * FROM reviews WHERE customer_id = ? and product_id = ?",
+        [custRows[0].customer_id,product_id],
+      )
+
+      if(prevRating.length===0)
+      {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        await pool.execute(
+          "INSERT INTO reviews(rating,review_date,product_id,customer_id) VALUES(?,?,?,?)",
+          [rating,formattedDate,product_id, custRows[0].customer_id],
+        )
+        res.status(200).json({ message: "Updated Review" });
+      }
+      else{
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        await pool.execute(
+          "UPDATE reviews SET rating=?, review_date=? WHERE customer_id = ? and product_id = ?",
+          [rating,formattedDate,custRows[0].customer_id,product_id],
+        )
+        res.status(200).json({ message: "Updated Review" });
+      }
+      
+    }
+    catch(error)
+    {
+      console.error("Error:", error);
+      res.status(500).json({ message: "Internal server error" }); 
+    }
+  }
 };

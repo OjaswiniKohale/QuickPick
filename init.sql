@@ -99,7 +99,9 @@ create table reviews (
     rating int,
     review_date date,
     customer_id int,
-    foreign key (customer_id) references customer(customer_id)
+    product_id int,
+    foreign key (customer_id) references customer(customer_id),
+    foreign key (product_id) references product(product_id)
 );
 
 create table supplier (

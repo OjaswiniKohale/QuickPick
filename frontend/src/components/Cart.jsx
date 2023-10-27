@@ -73,8 +73,20 @@ const Cart = (props) => {
     
   };
 
-  const handleRatingChange = (event) => {
-    setRating(Number(event.target.value)); // Convert value to a number
+  const handleRatingChange = async (event) => {
+    try{
+        const response = await axios.post("/api/v1/storeRating", {
+        rating: Number(event.target.value),
+        product_id: product_id
+      })
+      if(response.data.message==="Updated Review"){
+          setRating(Number(event.target.value)); // Convert value to a number
+      }
+    }
+    catch(error)
+    {
+      console.log(error)
+    }
   };
 
   return (

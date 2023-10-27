@@ -123,7 +123,64 @@ module.exports ={
         catch(error){
             return res.status(500).json({message:"Internal server error"});
         }
+    },
+
+    deliveryCost : async(req,res) => {
+        const token = req.cookies.token; // Token is stored in a cookie named 'token'
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
+
+    try {
+      // Verify the token
+      const pool = req.pool;
+
+      const decoded = jwt.verify(token, config.server.JWT_SECRET);
+      const email = decoded.email;
+      const [custRows] = await pool.execute(
+        "SELECT customer_id FROM customer WHERE email = ?",
+        [email]
+      );
+      const [prevDelivery] = await pool.execute(
+        "SELECT * FROM delivery WHERE customer_id = ?",
+        [custRows[0].customer_id],
+      )
+      if(prevDelivery.length===0)
+      {
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        const [totalPriceRows] = await pool.execute(
+            "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
+            [custRows[0].customer_id],
+        )
+        const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        await pool.execute(
+          "INSERT INTO delivery(delivery_date,delivery_cost,customer_id) VALUES(?,?,?)",
+          [formattedDate,deliveryCost,custRows[0].customer_id],
+        )
+        res.status(200).json({ deliveryCost : deliveryCost});
+      }
+      else{
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        const [totalPriceRows] = await pool.execute(
+            "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
+            [custRows[0].customer_id],
+        )
+        const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        await pool.execute(
+          "UPDATE delivery SET delivery_date=?,delivery_cost=? WHERE customer_id=?",
+          [formattedDate,deliveryCost,custRows[0].customer_id],
+        )
+        res.status(200).json({ deliveryCost : deliveryCost});
+      }
+    }
+    catch(error)
+    {
+        return res.status(500).json({message:"Internal server error"});
+    }
+} 
 }
 
 
