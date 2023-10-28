@@ -45,8 +45,14 @@ module.exports ={
             const decoded = jwt.verify(token, config.server.JWT_SECRET);
             const email = decoded.email;
             const {card_name, card_number, cvv} = req.body;
-
             const pool = req.pool;
+            const [authRows] = await pool.execute(
+              "CALL ValidatePaymentInfo(?, ?, ?)",
+              [card_name, card_number, cvv],
+            );
+            if (authRows[0][0].Auth === "Invalid") {
+              return res.status(200).json({message:"Authentication error"})
+            }
 
             const [custRows] = await pool.execute(
                 "SELECT customer_id FROM customer WHERE email = ?",

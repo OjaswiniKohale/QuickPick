@@ -78,6 +78,8 @@ export default function Checkout() {
     const response = await axios.post("/api/v1/savePayment", data);
     if (response.data.message === "Set payment details"){
       setActiveStep(activeStep + 1);
+    } else if (response.data.message === "Authentication error") {
+      console.log("Check your name, number or cvv");
     }
   }
 
