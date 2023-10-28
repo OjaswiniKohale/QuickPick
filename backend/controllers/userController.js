@@ -26,11 +26,11 @@ module.exports = {
         const currentDate = new Date().toISOString().slice(0, 10);
         const conn = await pool.getConnection();
         await conn.beginTransaction();
-        const [rows] = await pool.execute(
+        const [authRows] = await pool.execute(
           "CALL ValidateNumberEmail(?, ?)",
           [email, phone],
         );
-        if (rows[0].Auth === "Valid") {
+        if (authRows[0][0].Auth === "Valid") {
           await pool.execute(
             "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
             [

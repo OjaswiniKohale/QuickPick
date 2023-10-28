@@ -552,6 +552,42 @@ END;
 //
 DELIMITER ;
 
+DELIMITER //
+
+CREATE PROCEDURE ValidatePaymentInfo(IN paymentId INT)
+BEGIN
+    DECLARE cardNameCheck INT;
+    DECLARE cardNumberCheck INT;
+    DECLARE cvvCheck INT;
+
+    -- Check card_name (only letters, no numbers)
+    SELECT COUNT(*) INTO cardNameCheck
+    FROM payment
+    WHERE payment_id = paymentId
+    AND card_name REGEXP '^[A-Za-z]+$';
+
+    -- Check card_number (only numbers, no characters)
+    SELECT COUNT(*) INTO cardNumberCheck
+    FROM payment
+    WHERE payment_id = paymentId
+    AND card_number REGEXP '^[0-9]+$';
+
+    -- Check cvv (exactly 3 digits)
+    SELECT COUNT(*) INTO cvvCheck
+    FROM payment
+    WHERE payment_id = paymentId
+    AND cvv REGEXP '^[0-9]{3}$';
+
+    IF cardNameCheck = 1 AND cardNumberCheck = 1 AND cvvCheck = 1 THEN
+        SELECT 'Valid' AS Result;
+    ELSE
+        SELECT 'Invalid' AS Result;
+    END IF;
+END//
+
+DELIMITER ;
+
+
 -- DELIMITER //
 -- CREATE PROCEDURE ValidateLoginInfo(
 --     IN customer_email VARCHAR(30),
