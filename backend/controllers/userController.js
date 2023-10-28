@@ -26,20 +26,29 @@ module.exports = {
         const currentDate = new Date().toISOString().slice(0, 10);
         const conn = await pool.getConnection();
         await conn.beginTransaction();
-        await pool.execute(
-          "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
-          [
-            firstName,
-            middleName,
-            lastName,
-            email,
-            phone,
-            currentDate,
-            hashPassword,
-          ],
+        const [rows] = await pool.execute(
+          "CALL ValidateNumberEmail(?, ?)",
+          [email, phone],
         );
-        await conn.commit();
-        res.status(200).json({ message: "User registered successfully" });
+        if (rows[0].Auth === "Valid") {
+          await pool.execute(
+            "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [
+              firstName,
+              middleName,
+              lastName,
+              email,
+              phone,
+              currentDate,
+              hashPassword,
+            ],
+          );
+          await conn.commit();
+          return res.status(200).json({ message: "User registered successfully" });
+        } else {
+          console.log("Wrong email or phone");
+          return res.status(200).json({ message: "Wrong email or phone syntax" });
+        }
       } else {
         res.status(400).json({ message: "Email is already in use" });
       }

@@ -467,8 +467,7 @@ SELECT InsertInventoryWithResult('Fresheners', 'Goodnight refill', 51);
 SELECT InsertInventoryWithResult('Fresheners', 'Odonil air freshner', 52);
 
 DELIMITER //
-CREATE PROCEDURE ValidateSignUpInfo(
-    IN customer_id INT,
+CREATE PROCEDURE ValidateNumberEmail(
     IN customer_email VARCHAR(30),
     IN customer_phone_number BIGINT
 )
@@ -493,9 +492,9 @@ BEGIN
     );
 
     IF email_valid AND phone_valid THEN
-        SELECT 'valid.';
+        SELECT 'Valid' AS Auth;
     ELSE
-        SELECT 'Invalid';
+        SELECT 'Invalid' AS Auth;
     END IF;
 END;
 //
@@ -553,30 +552,29 @@ END;
 //
 DELIMITER ;
 
-DELIMITER //
-CREATE PROCEDURE ValidateLoginInfo(
-    IN customer_email VARCHAR(30),
-    IN customer_password VARCHAR(100),
-    OUT auth_result VARCHAR(50)
-)
-BEGIN
-    DECLARE customer_id INT;
+-- DELIMITER //
+-- CREATE PROCEDURE ValidateLoginInfo(
+--     IN customer_email VARCHAR(30),
+--     IN customer_password VARCHAR(100),
+--     OUT auth_result VARCHAR(50)
+-- )
+-- BEGIN
+--     DECLARE customer_id INT;
 
-    -- Find the customer ID based on the provided email and password
-    SELECT customer_id INTO customer_id
-    FROM customer
-    WHERE email = customer_email AND password = customer_password;
+--     -- Find the customer ID based on the provided email and password
+--     SELECT customer_id INTO customer_id
+--     FROM customer
+--     WHERE email = customer_email AND password = customer_password;
 
-    -- Check if the customer was found and set the result accordingly
-    IF customer_id IS NOT NULL THEN
-        SET auth_result = 'Authenticated';
-    ELSE
-        SET auth_result = 'Not Authenticated';
-    END IF;
-END;
-//
-DELIMITER ;
-
+--     -- Check if the customer was found and set the result accordingly
+--     IF customer_id IS NOT NULL THEN
+--         SET auth_result = 'Authenticated';
+--     ELSE
+--         SET auth_result = 'Not Authenticated';
+--     END IF;
+-- END;
+-- //
+-- DELIMITER ;
 
 INSERT INTO supplier (address,phone_number,first_name,last_name,company_id) 
 values 
