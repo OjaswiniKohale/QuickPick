@@ -29,10 +29,13 @@ module.exports = {
       );
 
       if (selectCartRows.length === 0) {
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "INSERT INTO shopping_cart(customer_id) values (?)",
           [custRows[0].customer_id]
         );
+        await conn.commit();
         [selectCartRows] = await pool.execute(
           "SELECT cart_id FROM shopping_cart WHERE customer_id = ?",
           [custRows[0].customer_id]
@@ -62,6 +65,8 @@ module.exports = {
         if (quantity > inventoryRows[0].quantity) {
           return res.status(200).json({ message: "Quantity insufficient" });
         } else {
+          const conn = await pool.getConnection();
+          await conn.beginTransaction();
           await pool.execute(
             "INSERT into cart_items (cart_id,product_id,quantity,total_price) values (?,?,?,?)",
             [
@@ -71,17 +76,21 @@ module.exports = {
               totalPrice,
             ]
           );
+          await conn.commit();
           res.status(200).json({ message: "Added to cart" });
         }
       } else {
         if (quantity > inventoryRows[0].quantity) {
           return res.status(200).json({ message: "Quantity insufficient" });
         } else {
-        await pool.execute(
-          "UPDATE cart_items set quantity =?, total_price = ? where product_id=? and cart_id=?",
-          [itemExistsRows[0].quantity + quantity, itemExistsRows[0].total_price + totalPrice, prodRows[0].product_id, selectCartRows[0].cart_id]
-        );
-        res.status(200).json({ message: "Added to cart" });
+          const conn = await pool.getConnection();
+          await conn.beginTransaction();
+          await pool.execute(
+            "UPDATE cart_items set quantity =?, total_price = ? where product_id=? and cart_id=?",
+            [itemExistsRows[0].quantity + quantity, itemExistsRows[0].total_price + totalPrice, prodRows[0].product_id, selectCartRows[0].cart_id]
+          );
+          await conn.commit();
+          res.status(200).json({ message: "Added to cart" });
         }
       }
     } catch (error) {
@@ -109,11 +118,9 @@ module.exports = {
         "SELECT p.product_id, p.name, p.image_url, c.total_price, c.quantity FROM product p NATURAL JOIN cart_items c WHERE c.cart_id =(select cart_id from shopping_cart where customer_id=?)",
         [custRows[0].customer_id]
       );
-    
-
-      res.status(200).json({ cartProducts: returnCartRows });
+      return res.status(200).json({ cartProducts: returnCartRows });
     } catch (error) {
-      res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json({ message: "Internal server error" });
     }
   },
 
@@ -136,10 +143,13 @@ module.exports = {
         "SELECT cart_id FROM shopping_cart WHERE customer_id=?",
         [custRows[0].customer_id],
       );
+      const conn = await pool.getConnection();
+      await conn.beginTransaction();
       await pool.execute(
         "DELETE FROM cart_items WHERE product_id=? and cart_id=?",
         [pid,shoppingCartRows[0].cart_id],
       )
+      await conn.commit();
       res.status(200).json({ message: "Successfully Deleted" });
     }
     catch(error)
@@ -181,10 +191,13 @@ module.exports = {
           if ((quantityRows[0].quantity + 1) > inventoryRows[0].quantity) {
             return res.status(200).json({ message: "Quantity issue" });
           }
+          const conn = await pool.getConnection();
+          await conn.beginTransaction();
           await pool.execute(
             "UPDATE cart_items set quantity =quantity +1, total_price = total_price + ? where cart_id=? and product_id=?",
             [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
+          await conn.commit();
           return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
         else{
@@ -195,10 +208,13 @@ module.exports = {
           if (quantityRows[0].quantity < 0) {
             return res.status(200).json({ message: "Quantity issue" });
           }
+          const conn = await pool.getConnection();
+          await conn.beginTransaction();
           await pool.execute(
             "UPDATE cart_items set quantity =quantity -1, total_price = total_price - ? where cart_id=? and product_id=?",
             [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
+          await conn.commit();
           return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
    }

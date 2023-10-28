@@ -17,16 +17,17 @@ module.exports = {
         const pool = req.pool;
   
         const { product_id, quantity } = req.body;
-  
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "UPDATE inventory SET quantity = ? WHERE product_id = ?",
           [quantity, product_id]
         );
-
-        res.status(200).json({ message: "Updated quantity" });
+        await conn.commit();
+        return res.status(200).json({ message: "Updated quantity" });
       } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
       }
     },
   };

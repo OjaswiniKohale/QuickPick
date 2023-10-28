@@ -18,14 +18,16 @@ module.exports ={
             
             const {address} = req.body;
             const [custRows] = await pool.execute(
-                "SELECT customer_id FROM customer WHERE email = ?",
-                [email]
-              );
+              "SELECT customer_id FROM customer WHERE email = ?",
+              [email]
+            );
+            const conn = await pool.getConnection();
+            await conn.beginTransaction();
             const [addressRows] = await pool.execute(
                 "UPDATE customer set address = ? WHERE customer_id = ?",
                 [address,custRows[0].customer_id],
             );
-            
+            await conn.commit();
             res.status(200).json({message:"Successfully got the address"})
         }
         catch(error){
@@ -64,33 +66,32 @@ module.exports ={
                     "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
                     [custRows[0].customer_id],
                 )
+                const conn = await pool.getConnection();
+                await conn.beginTransaction();
                 await pool.execute(
                     "INSERT INTO payment(card_name, card_number, cvv, customer_id, payment_date,payment_amount) VALUES (?, ?, ?, ?, ?, ?)",
                     [card_name, card_number, cvv, custRows[0].customer_id, formattedDate,totalPriceRows[0].total],
                 );
+                await conn.commit();
                 res.status(200).json({message:"Set payment details"})
             } else {
+                const conn = await pool.getConnection();
+                await conn.beginTransaction();
                 await pool.execute(
-                    "UPDATE payment SET card_name = ? WHERE payment_id = ?",
-                    [card_name, payRows[0].payment_id],
+                    "UPDATE payment SET card_name = ?, card_number = ?, cvv = ? WHERE payment_id = ?",
+                    [card_name, card_number, cvv, payRows[0].payment_id],
                 );
-                await pool.execute(
-                    "UPDATE payment SET card_number = ? WHERE payment_id = ?",
-                    [card_number, payRows[0].payment_id],
-                );
-                await pool.execute(
-                    "UPDATE payment SET cvv = ? WHERE payment_id = ?",
-                    [cvv, payRows[0].payment_id],
-                );
+                await conn.commit();
                 const [totalPriceRows] = await pool.execute(
                     "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
                     [custRows[0].customer_id],
                 )
+                await conn.beginTransaction();
                 await pool.execute(
                     "UPDATE payment SET payment_amount = ? WHERE payment_id = ?",
                     [totalPriceRows[0].total, payRows[0].payment_id],
                 );
-
+                await conn.commit();
                 res.status(200).json({message:"Set payment details"})
             }
         } catch (error) {
@@ -155,10 +156,13 @@ module.exports ={
             [custRows[0].customer_id],
         )
         const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "INSERT INTO delivery(delivery_date,delivery_cost,customer_id) VALUES(?,?,?)",
           [formattedDate,deliveryCost,custRows[0].customer_id],
         )
+        await conn.commit();
         res.status(200).json({ deliveryCost : deliveryCost});
       }
       else{
@@ -169,10 +173,13 @@ module.exports ={
             [custRows[0].customer_id],
         )
         const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "UPDATE delivery SET delivery_date=?,delivery_cost=? WHERE customer_id=?",
           [formattedDate,deliveryCost,custRows[0].customer_id],
         )
+        await conn.commit();
         res.status(200).json({ deliveryCost : deliveryCost});
       }
     }

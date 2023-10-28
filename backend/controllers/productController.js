@@ -79,19 +79,25 @@ module.exports = {
       {
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "INSERT INTO reviews(rating,review_date,product_id,customer_id) VALUES(?,?,?,?)",
           [rating,formattedDate,product_id, custRows[0].customer_id],
         )
+        await conn.commit();
         res.status(200).json({ message: "Updated Review" });
       }
       else{
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' ');
+        const conn = await pool.getConnection();
+        await conn.beginTransaction();
         await pool.execute(
           "UPDATE reviews SET rating=?, review_date=? WHERE customer_id = ? and product_id = ?",
           [rating,formattedDate,custRows[0].customer_id,product_id],
         )
+        await conn.commit();
         res.status(200).json({ message: "Updated Review" });
       }
       
