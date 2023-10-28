@@ -510,27 +510,48 @@ INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48,
 INSERT INTO management values(111);
 INSERT INTO technical values(112);
 
--- TRIGGER
+DELIMITER //
+CREATE TRIGGER update_inventory_after_cart_increase
+AFTER UPDATE ON cart_items
+FOR EACH ROW
+BEGIN
+    DECLARE quantity_diff INT;
 
--- DELIMITER $$
+    -- Calculate the difference in quantity
+    SET quantity_diff = NEW.quantity - OLD.quantity;
 
--- CREATE TRIGGER update_inventory_after_cart_increase
--- AFTER UPDATE ON cart_items
--- FOR EACH ROW
--- BEGIN
---     DECLARE quantity_diff INT;
+        -- Update the inventory
+        UPDATE inventory
+        SET quantity = GREATEST(quantity - quantity_diff, -1)
+        WHERE product_id = NEW.product_id;
+END;
+//
+DELIMITER ;
 
---     -- Calculate the difference in quantity
---     SET quantity_diff = NEW.quantity - OLD.quantity;
+DELIMITER //
+CREATE TRIGGER update_inventory_on_insert
+BEFORE INSERT ON cart_items
+FOR EACH ROW
+BEGIN
+    -- Insert operation: Add the new quantity to the inventory
+    UPDATE inventory
+    SET quantity = GREATEST(quantity - NEW.quantity, -1)
+    WHERE product_id = NEW.product_id;
+END;
+//
 
---     -- Update the inventory
---     UPDATE inventory
---     SET quantity = quantity - quantity_diff
---     WHERE product_id = NEW.product_id;
--- END $$
-
--- DELIMITER ;
-
+DELIMITER //
+CREATE TRIGGER update_inventory_on_delete
+AFTER DELETE ON cart_items
+FOR EACH ROW
+BEGIN
+    -- Delete operation: Add the deleted quantity back to the inventory
+    UPDATE inventory
+    SET quantity = quantity + OLD.quantity
+    WHERE product_id = OLD.product_id;
+END;
+//
+DELIMITER ;
 
 INSERT INTO supplier (address,phone_number,first_name,last_name,company_id) 
 values 

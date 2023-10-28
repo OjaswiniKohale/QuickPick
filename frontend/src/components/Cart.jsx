@@ -43,6 +43,8 @@ const Cart = (props) => {
   
         if (response.data.message === "Added to cart") {
           console.log("Yay");
+        } else if (response.data.message === "Quantity insufficient") {
+          console.log("Insufficient quantity")
         }
       } catch (error) {
         console.log(error);
@@ -61,16 +63,11 @@ const Cart = (props) => {
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 1 || inventoryQuantity >= 0) {
-      if(inventoryQuantity!==null)
-      {
-       setLocalInventoryQuantity(localInventoryQuantity-1);
-      } else {
-        setQuantity(quantity + 1);
-      }
-     
+    if (inventoryQuantity !== null || localInventoryQuantity > 0) {
+      setLocalInventoryQuantity(localInventoryQuantity-1);
+    } else if (quantity > 1) {
+      setQuantity(quantity - 1);
     }
-    
   };
 
   const handleRatingChange = async (event) => {

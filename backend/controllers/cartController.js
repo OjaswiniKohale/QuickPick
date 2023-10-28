@@ -22,7 +22,6 @@ module.exports = {
         "SELECT customer_id FROM customer WHERE email = ?",
         [email]
       );
-      console.log(custRows[0]);
 
       let [selectCartRows] = await pool.execute(
         "SELECT cart_id FROM shopping_cart WHERE customer_id = ?",
@@ -45,32 +44,45 @@ module.exports = {
         [name, img]
       );
 
+      const [inventoryRows] = await pool.execute(
+        "SELECT quantity FROM inventory WHERE product_id = ?",
+        [prodRows[0].product_id],
+      );
+
+      if (inventoryRows[0].quantity === -1) {
+        return res.status(200).json({ message: "Quantity insufficient" });
+      }
+
       const [itemExistsRows] = await pool.execute(
         "SELECT * FROM cart_items WHERE product_id=? AND cart_id=?",
         [prodRows[0].product_id, selectCartRows[0].cart_id]
       );
 
       if (itemExistsRows.length === 0) {
-        await pool.execute(
-          "INSERT into cart_items (cart_id,product_id,quantity,total_price) values (?,?,?,?)",
-          [
-            selectCartRows[0].cart_id,
-            prodRows[0].product_id,
-            quantity,
-            totalPrice,
-          ]
-        );
-        res.status(200).json({ message: "Added to cart" });
+        if (quantity > inventoryRows[0].quantity) {
+          return res.status(200).json({ message: "Quantity insufficient" });
+        } else {
+          await pool.execute(
+            "INSERT into cart_items (cart_id,product_id,quantity,total_price) values (?,?,?,?)",
+            [
+              selectCartRows[0].cart_id,
+              prodRows[0].product_id,
+              quantity,
+              totalPrice,
+            ]
+          );
+          res.status(200).json({ message: "Added to cart" });
+        }
       } else {
+        if (quantity > inventoryRows[0].quantity) {
+          return res.status(200).json({ message: "Quantity insufficient" });
+        } else {
         await pool.execute(
-          "UPDATE cart_items set quantity =? where cart_id=? and product_id=?",
-          [itemExistsRows[0].quantity + quantity]
-        );
-        await pool.execute(
-          "UPDATE cart_items set total_price =? where cart_id=? and product_id=?",
-          [itemExistsRows[0].total_price + totalPrice]
+          "UPDATE cart_items set quantity =?, total_price = ? where product_id=? and cart_id=?",
+          [itemExistsRows[0].quantity + quantity, itemExistsRows[0].total_price + totalPrice, prodRows[0].product_id, selectCartRows[0].cart_id]
         );
         res.status(200).json({ message: "Added to cart" });
+        }
       }
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });
@@ -156,30 +168,38 @@ module.exports = {
         "SELECT cart_id FROM shopping_cart WHERE customer_id=?",
         [custRows[0].customer_id],
       );
+      const [inventoryRows] = await pool.execute(
+        "SELECT quantity FROM inventory WHERE product_id = ?",
+        [pid],
+      );
         if(increaseQuantity){
-          await pool.execute(
-            "UPDATE cart_items set quantity =quantity +1 where cart_id=? and product_id=?",
+          const [quantityRows] = await pool.execute(
+            "SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = ?",
             [shoppingCartRows[0].cart_id,pid],
-            
-          )
+          );
+
+          if ((quantityRows[0].quantity + 1) > inventoryRows[0].quantity) {
+            return res.status(200).json({ message: "Quantity issue" });
+          }
           await pool.execute(
-            "UPDATE cart_items set total_price =total_price +? where cart_id=? and product_id=?",
-            [unitPrice,shoppingCartRows[0].cart_id,pid],
-            
+            "UPDATE cart_items set quantity =quantity +1, total_price = total_price + ? where cart_id=? and product_id=?",
+            [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
-          res.status(200).json({ message: "Successfully Updated Quantity" });
+          return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
         else{
-          await pool.execute(
-            "UPDATE cart_items set quantity =quantity -1 where cart_id=? and product_id=?",
+          const [quantityRows] = await pool.execute(
+            "SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = ?",
             [shoppingCartRows[0].cart_id,pid],
-          )
+          );
+          if (quantityRows[0].quantity < 0) {
+            return res.status(200).json({ message: "Quantity issue" });
+          }
           await pool.execute(
-            "UPDATE cart_items set total_price =total_price -? where cart_id=? and product_id=?",
-            [unitPrice,shoppingCartRows[0].cart_id,pid],
-            
+            "UPDATE cart_items set quantity =quantity -1, total_price = total_price - ? where cart_id=? and product_id=?",
+            [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
-          res.status(200).json({ message: "Successfully Updated Quantity" });
+          return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
    }
    catch(error){

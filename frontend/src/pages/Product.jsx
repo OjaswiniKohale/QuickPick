@@ -58,7 +58,6 @@ const Product = ({ currentCart, makeCart }) => {
               makeCart={makeCart}
               currentCart={currentCart}
               inventoryQuantity={product.quantity || null}
-              
             />
           </div>
         ))}

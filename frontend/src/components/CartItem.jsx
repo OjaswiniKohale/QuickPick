@@ -16,6 +16,8 @@ const CartItem = (props) => {
       if(response.data.message==="Successfully Updated Quantity")
       {
         setRefresh(refresh ? false : true);
+      } else if (response.data.message === "Quantity issue") {
+        console.log("Cannot increase or decrease quantity beyond this point")
       }
     }
     catch(error)
