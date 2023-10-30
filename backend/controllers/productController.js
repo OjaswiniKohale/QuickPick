@@ -86,6 +86,7 @@ module.exports = {
           [rating,formattedDate,product_id, custRows[0].customer_id],
         )
         await conn.commit();
+        await conn.release();
         res.status(200).json({ message: "Updated Review" });
       }
       else{
@@ -98,6 +99,7 @@ module.exports = {
           [rating,formattedDate,custRows[0].customer_id,product_id],
         )
         await conn.commit();
+        await conn.release();
         res.status(200).json({ message: "Updated Review" });
       }
       

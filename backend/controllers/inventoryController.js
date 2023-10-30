@@ -24,6 +24,7 @@ module.exports = {
           [quantity, product_id]
         );
         await conn.commit();
+        await conn.release();
         return res.status(200).json({ message: "Updated quantity" });
       } catch (error) {
         console.log(error);

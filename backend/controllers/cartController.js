@@ -77,6 +77,7 @@ module.exports = {
             ]
           );
           await conn.commit();
+          await conn.release();
           res.status(200).json({ message: "Added to cart" });
         }
       } else {
@@ -90,6 +91,7 @@ module.exports = {
             [itemExistsRows[0].quantity + quantity, itemExistsRows[0].total_price + totalPrice, prodRows[0].product_id, selectCartRows[0].cart_id]
           );
           await conn.commit();
+          await conn.release();
           res.status(200).json({ message: "Added to cart" });
         }
       }
@@ -150,6 +152,7 @@ module.exports = {
         [pid,shoppingCartRows[0].cart_id],
       )
       await conn.commit();
+      await conn.release();
       res.status(200).json({ message: "Successfully Deleted" });
     }
     catch(error)
@@ -179,7 +182,7 @@ module.exports = {
         [custRows[0].customer_id],
       );
       const [inventoryRows] = await pool.execute(
-        "SELECT quantity FROM inventory WHERE product_id = ?",
+        "SELECT quantity FROM inventory WHERE product_id =?",
         [pid],
       );
         if(increaseQuantity){
@@ -187,8 +190,8 @@ module.exports = {
             "SELECT quantity FROM cart_items WHERE cart_id = ? AND product_id = ?",
             [shoppingCartRows[0].cart_id,pid],
           );
-
-          if ((quantityRows[0].quantity + 1) > inventoryRows[0].quantity) {
+            console.log(inventoryRows[0].quantity );
+          if (inventoryRows[0].quantity===0) {
             return res.status(200).json({ message: "Quantity issue" });
           }
           const conn = await pool.getConnection();
@@ -198,6 +201,7 @@ module.exports = {
             [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
           await conn.commit();
+          await conn.release();
           return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
         else{
@@ -215,6 +219,7 @@ module.exports = {
             [unitPrice, shoppingCartRows[0].cart_id,pid],
           )
           await conn.commit();
+          await conn.release();
           return res.status(200).json({ message: "Successfully Updated Quantity" });
         }
    }

@@ -32,7 +32,7 @@ module.exports = {
         );
         if (authRows[0][0].Auth === "Valid") {
           await pool.execute(
-            "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO customer (first_name, middle_name, last_name, email, phone_number, account_creation_date, password,company_id) VALUES (?, ?, ?, ?, ?, ?, ?,?)",
             [
               firstName,
               middleName,
@@ -41,6 +41,7 @@ module.exports = {
               phone,
               currentDate,
               hashPassword,
+              1
             ],
           );
           await conn.commit();

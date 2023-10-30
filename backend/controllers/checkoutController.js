@@ -28,6 +28,7 @@ module.exports ={
                 [address,custRows[0].customer_id],
             );
             await conn.commit();
+            await conn.release();
             res.status(200).json({message:"Successfully got the address"})
         }
         catch(error){
@@ -76,9 +77,10 @@ module.exports ={
                 await conn.beginTransaction();
                 await pool.execute(
                     "INSERT INTO payment(card_name, card_number, cvv, customer_id, payment_date,payment_amount) VALUES (?, ?, ?, ?, ?, ?)",
-                    [card_name, card_number, cvv, custRows[0].customer_id, formattedDate,totalPriceRows[0].total],
+                    [card_name, card_number, cvv, custRows[0].customer_id, formattedDate,totalPriceRows[0].total*0.05+totalPriceRows[0].total],
                 );
                 await conn.commit();
+                await conn.release();
                 res.status(200).json({message:"Set payment details"})
             } else {
                 const conn = await pool.getConnection();
@@ -88,6 +90,7 @@ module.exports ={
                     [card_name, card_number, cvv, payRows[0].payment_id],
                 );
                 await conn.commit();
+                await conn.release();
                 const [totalPriceRows] = await pool.execute(
                     "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
                     [custRows[0].customer_id],
@@ -95,9 +98,10 @@ module.exports ={
                 await conn.beginTransaction();
                 await pool.execute(
                     "UPDATE payment SET payment_amount = ? WHERE payment_id = ?",
-                    [totalPriceRows[0].total, payRows[0].payment_id],
+                    [totalPriceRows[0].total*0.05+totalPriceRows[0].total, payRows[0].payment_id],
                 );
                 await conn.commit();
+                await conn.release();
                 res.status(200).json({message:"Set payment details"})
             }
         } catch (error) {
@@ -161,7 +165,7 @@ module.exports ={
             "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
             [custRows[0].customer_id],
         )
-        const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        const deliveryCost = totalPriceRows[0].total*0.05
         const conn = await pool.getConnection();
         await conn.beginTransaction();
         await pool.execute(
@@ -169,6 +173,7 @@ module.exports ={
           [formattedDate,deliveryCost,custRows[0].customer_id],
         )
         await conn.commit();
+        await conn.release();
         res.status(200).json({ deliveryCost : deliveryCost});
       }
       else{
@@ -178,7 +183,7 @@ module.exports ={
             "select sum(total_price) as total from cart_items where cart_id=(select cart_id from shopping_cart where customer_id=?)",
             [custRows[0].customer_id],
         )
-        const deliveryCost = totalPriceRows[0].total*0.05 + totalPriceRows[0].total
+        const deliveryCost = totalPriceRows[0].total*0.05;
         const conn = await pool.getConnection();
         await conn.beginTransaction();
         await pool.execute(
@@ -186,6 +191,7 @@ module.exports ={
           [formattedDate,deliveryCost,custRows[0].customer_id],
         )
         await conn.commit();
+        await conn.release();
         res.status(200).json({ deliveryCost : deliveryCost});
       }
     }
