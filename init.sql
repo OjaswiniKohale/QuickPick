@@ -50,7 +50,7 @@ create table delivery (
 
 create table payment (
     payment_id int primary key unique auto_increment,
-    method varchar(20),
+    method varchar(20) default 'card',
     payment_date datetime not null,
     payment_amount float not null,
     card_name varchar(30),
@@ -67,8 +67,7 @@ create table product (
     name varchar(50),
     image_url varchar(200),
     price float
-    -- stock_id int,
-    -- foreign key (stock_id) references inventory(stock_id)
+    
 );
 
 create table inventory (
@@ -320,7 +319,7 @@ values
 ( 'Cleaners' ,
  '20 Rs for 250 ml' ,
 'Vim liquid gel',
-'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrJIMJGJA3ZQ2oveGs0z1hquI_Q87x4anyWQ&usqp=CAU',
+'https://th.bing.com/th/id/OIP.gpvKgPVK2jzVleF40MlhewHaHa?w=198&h=198&c=7&r=0&o=5&dpr=1.5&pid=1.7',
 20),
 ( 'Cleaners' ,
  '110 Rs for 500 ml' ,

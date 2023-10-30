@@ -8,13 +8,6 @@ import axios from "axios";
 import { useEffect,useState } from "react";
 
 
-const payments = [
-  { name: "Card type", detail: "Visa" },
-  { name: "Card holder", detail: "Mr John Smith" },
-  { name: "Card number", detail: "xxxx-xxxx-xxxx-1234" },
-  { name: "Expiry date", detail: "04/2024" },
-];
-
 export default function Review() {
   
   const [productDetails,setProductDetails] = useState([])
@@ -25,6 +18,7 @@ export default function Review() {
   },[])
   const handleDeliveryCost = async() => {
     const response = await axios.get("/api/v1/deliveryCost");
+    console.log(response.data);
     if(response.data.deliveryCost){
       setDeliveryCost(response.data.deliveryCost)
     }
@@ -52,13 +46,13 @@ export default function Review() {
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Delivery Cost" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-          + Rs.{deliveryCost/21}
+          + Rs.{deliveryCost}
           </Typography>
         </ListItem>
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-          Rs.{deliveryCost}
+          Rs.{deliveryCost*21}
           </Typography>
         </ListItem>
       </List>
