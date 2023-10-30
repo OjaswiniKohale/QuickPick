@@ -41,14 +41,19 @@ module.exports = {
               phone,
               currentDate,
               hashPassword,
-              1
+              1,
             ],
           );
           await conn.commit();
-          return res.status(200).json({ message: "User registered successfully" });
+          await conn.release();
+          return res
+            .status(200)
+            .json({ message: "User registered successfully" });
         } else {
           console.log("Wrong email or phone");
-          return res.status(200).json({ message: "Wrong email or phone syntax" });
+          return res
+            .status(200)
+            .json({ message: "Wrong email or phone syntax" });
         }
       } else {
         res.status(400).json({ message: "Email is already in use" });
@@ -63,43 +68,41 @@ module.exports = {
 
     const pool = req.pool;
     try {
-      if(email==='groot@admin.com' || email === 'beetroot@admin.com'){
+      if (email === "groot@admin.com" || email === "beetroot@admin.com") {
         const [rows] = await pool.execute(
           "SELECT password FROM employee WHERE email = ?",
           [email],
         );
         const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
-          if(match){
-            const payload = { email: email };
-            const token = jwt.sign(payload, config.server.JWT_SECRET, {
-              expiresIn: "1h",
-            });
-            res.cookie("admintoken", token, { maxAge: 3600000, httpOnly: true });
-    
-            res.status(200).json({ message: "adminsuccess" }); 
-          }
-          else{
-            res.status(400).json({ message: "Incorrect password entered" });
-          }
-      }
-      else{
+        if (match) {
+          const payload = { email: email };
+          const token = jwt.sign(payload, config.server.JWT_SECRET, {
+            expiresIn: "1h",
+          });
+          res.cookie("admintoken", token, { maxAge: 3600000, httpOnly: true });
+
+          res.status(200).json({ message: "adminsuccess" });
+        } else {
+          res.status(400).json({ message: "Incorrect password entered" });
+        }
+      } else {
         const [rows, fields] = await pool.execute(
           "SELECT password FROM customer WHERE email = ?",
           [email],
         );
-  
+
         if (rows.length === 0) {
           res.status(400).json({ message: "This email has not registered" });
         } else {
           const match = await bcrypt.compare(password, rows[0].password); // Remaining: Check rows object
-  
+
           if (match) {
             const payload = { email: email };
             const token = jwt.sign(payload, config.server.JWT_SECRET, {
               expiresIn: "1h",
             });
             res.cookie("token", token, { maxAge: 3600000, httpOnly: true });
-  
+
             res.status(200).json({ message: "success" });
           } else {
             res.status(400).json({ message: "Incorrect password entered" });
@@ -115,30 +118,29 @@ module.exports = {
     const adminToken = req.cookies.admintoken;
     if (adminToken) {
       const decoded = jwt.verify(adminToken, config.server.JWT_SECRET);
-      if (decoded.email === 'groot@admin.com' || decoded.email ==='beetroot@admin.com') {
+      if (
+        decoded.email === "groot@admin.com" ||
+        decoded.email === "beetroot@admin.com"
+      ) {
         return res.status(200).json({ message: "Admin token exists" });
       }
-    }
-    else if(token){
+    } else if (token) {
       const decoded = jwt.verify(token, config.server.JWT_SECRET);
       return res.status(200).json({ message: "Token exists" });
     }
   },
 
-  clearCookies: async(req,res) =>{
+  clearCookies: async (req, res) => {
     const token = req.cookies.token;
     const adminToken = req.cookies.admintoken;
-    if(token){
-      res.clearCookie("token")
-      console.log("i am being called")
-      return res.status(200).json({message:"Cleared User Cookie"})
+    if (token) {
+      res.clearCookie("token");
+      console.log("i am being called");
+      return res.status(200).json({ message: "Cleared User Cookie" });
     }
-    if(adminToken){
+    if (adminToken) {
       res.clearCookie("adminToken");
-      return res.status(200).json({message:"Cleared Admin Cookie"})
+      return res.status(200).json({ message: "Cleared Admin Cookie" });
     }
   },
 };
-
-
-

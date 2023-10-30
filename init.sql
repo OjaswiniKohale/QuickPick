@@ -10,7 +10,7 @@ create table employee (
     last_name varchar(30) not null,
     phone_number bigint unique not null,
     address varchar(50) not null,
-     password varchar(100) not null,
+    password varchar(100) not null,
     email varchar(30) unique not null,
     company_id int,
     foreign key (company_id) references company(company_id)
@@ -67,7 +67,10 @@ create table product (
     name varchar(50),
     image_url varchar(200),
     price float
-    
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 );
 
 create table inventory (
@@ -195,7 +198,7 @@ values(
 
 insert into product(
 category, description, name, image_url, price
-) 
+)
 values(
 'Sweets', '500 Rs for 200gm','Ferrero Rocher',
 'https://m.media-amazon.com/images/I/81JugTbWdzL.jpg', 500
@@ -389,7 +392,9 @@ BEGIN
     DECLARE success_message VARCHAR(50);
     DECLARE fail_message VARCHAR(50);
     DECLARE result VARCHAR(50);
+
     -- Attempt to insert the values
+
     INSERT INTO inventory (quantity, category, name, product_id)
     VALUES (50, in_category, in_name, in_product_id);
 
@@ -401,7 +406,7 @@ BEGIN
         SET fail_message = 'Error: Row not inserted into inventory.';
         SET result = fail_message;
     END IF;
-    
+
     RETURN result;
 END //
 DELIMITER ;
@@ -475,7 +480,7 @@ BEGIN
     DECLARE phone_valid BOOLEAN;
 
     -- Validate email format
-    SET email_valid = (SELECT 
+    SET email_valid = (SELECT
         CASE
             WHEN customer_email REGEXP '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]{2,4}$' THEN TRUE
             ELSE FALSE
@@ -483,7 +488,7 @@ BEGIN
     );
 
     -- Validate phone number format (assuming 10-digit format)
-    SET phone_valid = (SELECT 
+    SET phone_valid = (SELECT
         CASE
             WHEN LENGTH(CAST(customer_phone_number AS CHAR)) = 10 AND customer_phone_number > 0 THEN TRUE
             ELSE FALSE
@@ -495,58 +500,6 @@ BEGIN
     ELSE
         SELECT 'Invalid' AS Auth;
     END IF;
-END;
-//
-DELIMITER ;
-
-INSERT INTO company values(1,'QuickPick');
-
-INSERT INTO employee values(111,'groot','groot','groot',1212121212,'45, Parklane Joy Pune','$2b$10$3fbVVKtB4YI4NTD3WbKcVeo5av6DbHd3ovrS7U3OIwJ0VVZJvbaeS','groot@admin.com',1);
-
-INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48, Amar Heights Nashik','$2b$10$4xfsqHIFFgJ9TaGad/JWL.XDZXKExbDKLQ8c8odwUatdW7vspvYGi','beetgroot@admin.com',1);
-
-INSERT INTO management values(111);
-INSERT INTO technical values(112);
-
-DELIMITER //
-CREATE TRIGGER update_inventory_after_cart_increase
-AFTER UPDATE ON cart_items
-FOR EACH ROW
-BEGIN
-    DECLARE quantity_diff INT;
-
-    -- Calculate the difference in quantity
-    SET quantity_diff = NEW.quantity - OLD.quantity;
-
-        -- Update the inventory
-        UPDATE inventory
-        SET quantity = GREATEST(quantity - quantity_diff, -1)
-        WHERE product_id = NEW.product_id;
-END;
-//
-DELIMITER ;
-
-DELIMITER //
-CREATE TRIGGER update_inventory_on_insert
-BEFORE INSERT ON cart_items
-FOR EACH ROW
-BEGIN
-    -- Insert operation: Add the new quantity to the inventory
-    UPDATE inventory
-    SET quantity = GREATEST(quantity - NEW.quantity, -1)
-    WHERE product_id = NEW.product_id;
-END;
-//
-
-DELIMITER //
-CREATE TRIGGER update_inventory_on_delete
-AFTER DELETE ON cart_items
-FOR EACH ROW
-BEGIN
-    -- Delete operation: Add the deleted quantity back to the inventory
-    UPDATE inventory
-    SET quantity = quantity + OLD.quantity
-    WHERE product_id = OLD.product_id;
 END;
 //
 DELIMITER ;
@@ -593,34 +546,60 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
+CREATE TRIGGER update_inventory_after_cart_increase
+AFTER UPDATE ON cart_items
+FOR EACH ROW
+BEGIN
+    DECLARE quantity_diff INT;
 
+    -- Calculate the difference in quantity
+    SET quantity_diff = NEW.quantity - OLD.quantity;
 
--- DELIMITER //
--- CREATE PROCEDURE ValidateLoginInfo(
---     IN customer_email VARCHAR(30),
---     IN customer_password VARCHAR(100),
---     OUT auth_result VARCHAR(50)
--- )
--- BEGIN
---     DECLARE customer_id INT;
+    -- Update the inventory
+    UPDATE inventory
+    SET quantity = GREATEST(quantity - quantity_diff, -1)
+    WHERE product_id = NEW.product_id;
+END;
+//
+DELIMITER ;
 
---     -- Find the customer ID based on the provided email and password
---     SELECT customer_id INTO customer_id
---     FROM customer
---     WHERE email = customer_email AND password = customer_password;
+DELIMITER //
+CREATE TRIGGER update_inventory_on_insert
+BEFORE INSERT ON cart_items
+FOR EACH ROW
+BEGIN
+    -- Insert operation: Add the new quantity to the inventory
+    UPDATE inventory
+    SET quantity = GREATEST(quantity - NEW.quantity, -1)
+    WHERE product_id = NEW.product_id;
+END;
+//
 
---     -- Check if the customer was found and set the result accordingly
---     IF customer_id IS NOT NULL THEN
---         SET auth_result = 'Authenticated';
---     ELSE
---         SET auth_result = 'Not Authenticated';
---     END IF;
--- END;
--- //
--- DELIMITER ;
+DELIMITER //
+CREATE TRIGGER update_inventory_on_delete
+AFTER DELETE ON cart_items
+FOR EACH ROW
+BEGIN
+    -- Delete operation: Add the deleted quantity back to the inventory
+    UPDATE inventory
+    SET quantity = quantity + OLD.quantity
+    WHERE product_id = OLD.product_id;
+END;
+//
+DELIMITER ;
 
-INSERT INTO supplier (address,phone_number,first_name,last_name,company_id) 
-values 
+INSERT INTO company values(1,'QuickPick');
+
+INSERT INTO employee values(111,'groot','groot','groot',1212121212,'45, Parklane Joy Pune','$2b$10$3fbVVKtB4YI4NTD3WbKcVeo5av6DbHd3ovrS7U3OIwJ0VVZJvbaeS','groot@admin.com',1);
+
+INSERT INTO employee values(112,'beetroot','beetroot','beetroot',1223344556,'48, Amar Heights Nashik','$2b$10$4xfsqHIFFgJ9TaGad/JWL.XDZXKExbDKLQ8c8odwUatdW7vspvYGi','beetgroot@admin.com',1);
+
+INSERT INTO management values(111);
+INSERT INTO technical values(112);
+
+INSERT INTO supplier (address,phone_number,first_name,last_name,company_id)
+values
 ("402 Parklane sus gaon Pune",6543218282,"Shreya","Nair",1),
 ("709 Above Sai Hotel Sangam Vihar Delhi",987654321,"Rakshit","agarwal",1),
 ("12/13 Khopoli Road Pune",1234567212,"Manoj","Kumar",1),
