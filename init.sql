@@ -67,10 +67,6 @@ create table product (
     name varchar(50),
     image_url varchar(200),
     price float
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 );
 
 create table inventory (
